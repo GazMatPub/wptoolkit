@@ -1,0 +1,37 @@
+.gk-install { display: inline-block; padding: 5px 10px; margin-left: 1.23em; border-radius: 4px; color: #7D7979; clear: both; margin-bottom: 18px; }
+.gk-install span { font-weight: bold; }
+.gk-install.ischecked { background-color: #3AC763 !important; color: #fff !important; }
+#install-checkbox button[type="checkbox"] { margin-left: 16px!important; }
+.license-active { margin-right: 10px; padding: 5px 15px; border-radius: 4px; vertical-align: middle; color: #33601C; background: #69D033; display: inline-block; }
+.license-status { text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.42); margin-right: 10px; padding: 5px 15px; border-radius: 4px; vertical-align: middle; color: #998417; background: #EDD245; display: inline-block; }
+.gk-plugin-wrapper { background: #f5f5f5; min-height: 250px; position: relative; }
+a.gk-plugin-link { text-decoration: none !important; }
+span.gk-plugin-title { color: #222; font-size: 1.1em; padding: 15px; background: #fff; border-bottom: 1px solid #E3E3E3; display: inline-block; width: 269px; }
+.gk-plugin-inner p { padding: 20px!important; margin: 0!important; color: #454545; word-wrap: break-word; }
+.gk-plugin-wrapper img { position: absolute; bottom: 10px; right: 30px; }
+.gk-plugin-wrapper button.button { width: 100%; box-sizing: border-box; background: #2895F0; border: 0px; box-shadow: none; border-radius: 0px; color: #fff; position: absolute; bottom: 0; height: 38px; }
+.gk-plugin-wrapper button.button:hover { background: #1678CA; color: #fff; }
+.gk-plugin-wrapper:hover { background: #fff; }
+#Container .mix { display: none; }
+.gkitcontainer { overflow: hidden; list-style: none; clear: both; }
+li.gkititem { float: left; margin: 0 2em 2em 0!important; padding: 0; vertical-align: top; width: 300px; border: 1px solid #E2E2E2; }
+.gk-plugin-install { float: right; margin: -18px 0 0 0px; }
+.gk-plugin-inner cite { display: none; }
+.wptoolkit-nav { padding: 8px 25px; background: #fff; border: 1px solid #E2E2E2; }
+#wptoolkit-notice { color: #222; font-size: 1.1em; padding: 7px 22px; box-sizing: border-box; background: #fff; border-bottom: 1px solid #E3E3E3; display: inline-block; margin-right: 15px; }
+.woocommerce_page_wptoolkit_plugin_manager_activation .main { width: 100%; }
+.gk-section a.filter { display: block; clear: both; padding-bottom: 13px; margin: 0px; }
+.gk-section a.filter:hover { cursor: pointer; color: #004769; }
+.gk-section a.filter:last-child { padding-bottom: 0px; }
+.gk-section { clear: both; padding: 0px; margin: 0px; }
+.gk-col { display: block; float:left; margin: 1% 0 1% 1.6%; }
+.gk-col:first-child { margin-left: 0; }
+.gk-group:before, .gk-group:after { content:""; display:table; }
+.gk-group:after { clear:both;}
+.gk-gk-group { zoom:1; /* For IE 6/7 */ }
+.gk-span_1_of_4 { width: 23.8%; }
+.wp-core-ui .button.pl-installed[disabled],.wp-core-ui .button.pl-activated[disabled] { background: #27C228 !important; color: #ffffff !important; text-shadow: 0 1px 0 #329832!important; }
+@media only screen and (max-width: 480px) { 
+	.gk-col {  margin: 1% 0 1% 0%; } 
+	.gk-span_1_of_4 { width: 100%; }
+}
