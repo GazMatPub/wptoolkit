@@ -28,7 +28,7 @@ class WPToolKit_Updates {
 
 			add_filter('site_transient_update_plugins', array(__CLASS__, 'override_update_locations') );
 			
-			//** This checks Themes Updates
+			//** This checks Themes Updates and override location
 			add_filter('site_transient_update_themes', array(__CLASS__, 'override_update_theme_locations') );
 
 		}
@@ -76,7 +76,8 @@ class WPToolKit_Updates {
 		return $value;
 
 	}
-	
+
+	/* Override theme location and correct version */	
 	public static function override_update_theme_locations($value) {
 
 		if ( get_option( 'wptoolkit_plugin_manager_activated' ) == 'Activated' ) {
@@ -84,10 +85,6 @@ class WPToolKit_Updates {
 			$all_themes = wp_get_themes();
 
 			if ($wptoolkit_themes = get_option('wptoolkit_themes')) {
-// print_r($value);
-// print_r($all_themes);
-// print_r($wptoolkit_themes);
-// die();
 				foreach($all_themes as $key => $theme) {
 
 					if (array_key_exists($key, $wptoolkit_themes)) {
