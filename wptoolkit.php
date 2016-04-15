@@ -141,5 +141,6 @@ function WPT_force_update_lists(){
 	WPToolKit_Updates::get_plugin_catalogue();
 	die();
 }
+
 add_action( 'wp_ajax_get_plugin_catalogue', "WPT_force_update_lists" );
 add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "WPT_force_update_lists");
