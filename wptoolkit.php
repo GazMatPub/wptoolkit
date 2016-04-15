@@ -94,12 +94,20 @@ function GK() {
 $GLOBALS['wptoolkit'] = GK();
 
 
-add_action( 'wp_ajax_get_plugin_catalogue', "xxxx" );
-add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "xxxx");
+//** Overrides actions set by Elegant Themes that prevents plugin and theme updates.
+function override_et() {
+	if(isset($GLOBALS['et_core_updates'])){
+		remove_action( 'pre_set_site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'check_plugins_updates' ));
+		remove_action( 'site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'add_plugins_to_update_notification' ));
+		remove_action( 'pre_set_site_transient_update_themes', array( $GLOBALS['et_core_updates'], 'check_themes_updates' ));
+		remove_action( 'site_transient_update_themes', array( $GLOBALS['et_core_updates'], 'add_themes_to_update_notification' ));
+	}
+}
+add_action( 'admin_init', 'override_et',1000000 );
 
 function WPT_remote_download($url, $save_path = false){
 	// Use wp_remote_get to fetch the data
-	$response = wp_remote_get($url);
+	$response = wp_remote_get($url, array("timeout" => PHP_INT_MAX));
 
 	// Save the body part to a variable
 	$zip = $response['body'];
@@ -120,19 +128,18 @@ function WPT_remote_download($url, $save_path = false){
 	}else{
 		if($zip){
 			return array("filenam" => $match[1], "body" => $zip);
-		}else{
+		}else{ 
 			return false;
 		}
 	}
 }
 
-function xxxx(){
+/*
+	This is used to force WPToolkit to update its lists of plugins and themes
+*/
+function WPT_force_update_lists(){
 	WPToolKit_Updates::get_plugin_catalogue();
 	die();
 }
-add_action( 'wp_ajax_get_theme_catalogue', "yyy" );
-add_action( 'wp_ajax_nopriv_get_theme_catalogue', "yyy");
-
-function yyy(){
-	WPT_remote_download( "http://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id=wp-toolkit&email=magicarty@gmail.com&licence_key=827cff840d7b8f5c512a5e3efc5b17d1");
-}
+add_action( 'wp_ajax_get_plugin_catalogue', "WPT_force_update_lists" );
+add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "WPT_force_update_lists");
