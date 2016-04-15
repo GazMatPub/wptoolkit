@@ -78,7 +78,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		add_settings_section( WPT()->ame_api_key, __( 'WPToolKit License Activation', WPT()->text_domain ), array( $this, 'wc_am_api_key_text' ), WPT()->ame_activation_tab_key );
 		add_settings_field( 'status', __( 'WPToolKit License Key Status', WPT()->text_domain ), array( $this, 'wc_am_api_key_status' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_api_key, __( 'WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_api_key_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
-		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
+		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key);
 		// Activation settings
 		register_setting( WPT()->ame_deactivate_checkbox, WPT()->ame_deactivate_checkbox, array( $this, 'wc_am_license_key_deactivation' ) );
 		add_settings_section( 'deactivate_button', __( 'WPToolKit License Deactivation', WPT()->text_domain ), array( $this, 'wc_am_deactivate_text' ), WPT()->ame_deactivation_tab_key );
