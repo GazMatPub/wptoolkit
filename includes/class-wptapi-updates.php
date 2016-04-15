@@ -27,6 +27,9 @@ class WPToolKit_Updates {
 		if (is_admin()) {
 
 			add_filter('site_transient_update_plugins', array(__CLASS__, 'override_update_locations') );
+			
+			//** This checks Themes Updates
+			add_filter('site_transient_update_themes', array(__CLASS__, 'override_update_theme_locations') );
 
 		}
 		
@@ -69,9 +72,51 @@ class WPToolKit_Updates {
 				
 				}
 			}
+		}		
+		return $value;
+
+	}
+	
+	public static function override_update_theme_locations($value) {
+
+		if ( get_option( 'wptoolkit_plugin_manager_activated' ) == 'Activated' ) {
+
+			$all_themes = wp_get_themes();
+
+			if ($wptoolkit_themes = get_option('wptoolkit_themes')) {
+// print_r($value);
+// print_r($all_themes);
+// print_r($wptoolkit_themes);
+// die();
+				foreach($all_themes as $key => $theme) {
+
+					if (array_key_exists($key, $wptoolkit_themes)) {
+
+						$wptoolkit_licence_manager = get_option('wptoolkit_plugin_manager');
+
+						$email = $wptoolkit_licence_manager['activation_email'];
+						$licence_key = $wptoolkit_licence_manager['api_key'];
+						$product_id = 'WPToolKit%20Plugin%20Manager';
+						$instance = get_option('wptoolkit_plugin_manager_instance');
+
+						$theme_url = 'https://api.wptoolkit.com/?wpt_theme_download=get&theme_id='.$wptoolkit_themes[$key]['theme_id'].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_status';
+						
+				        $obj = array(
+							"theme" 		=> $key,
+							"url" 			=> "https://wptoolkit.com/",
+							"new_version" 	=> $wptoolkit_themes[$key]['Version'],
+							"package" 		=> $theme_url
+						);
+						
+				        /* if new version is different to current version */
+						if ($theme->get("Version") != $obj["new_version"]) {
+					        /* add to transient */
+				    	    $value->response[$key] = $obj;
+						}
+					}
+				}
+			}
 		}
-		
-		
 		return $value;
 
 	}
