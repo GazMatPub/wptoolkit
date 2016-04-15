@@ -95,7 +95,7 @@ $GLOBALS['wptoolkit'] = GK();
 
 
 //** Overrides actions set by Elegant Themes that prevents plugin and theme updates.
-function override_et() {
+function WPT_override_et() {
 	if(isset($GLOBALS['et_core_updates'])){
 		remove_action( 'pre_set_site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'check_plugins_updates' ));
 		remove_action( 'site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'add_plugins_to_update_notification' ));
@@ -103,7 +103,7 @@ function override_et() {
 		remove_action( 'site_transient_update_themes', array( $GLOBALS['et_core_updates'], 'add_themes_to_update_notification' ));
 	}
 }
-add_action( 'admin_init', 'override_et',1000000 );
+add_action( 'admin_init', 'WPT_override_et',1000000 );
 
 function WPT_remote_download($url, $save_path = false){
 	// Use wp_remote_get to fetch the data
