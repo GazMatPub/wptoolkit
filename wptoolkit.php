@@ -15,6 +15,20 @@
 	exit; // Exit if accessed directly
 }
 
+	/* Turns off WPMUDEV Nags */
+	if (!class_exists('WPMUDEV_Update_Notifications')) {
+		class WPMUDEV_Update_Notifications {
+			public function __construct() {}
+		}
+	}
+
+	if ( !class_exists('WPMUDEV_Dashboard') ) {
+		class WPMUDEV_Dashboard {
+			public function __construct() {}
+		}
+	}	
+	/* ENDOF Turns off WPMUDEV Nags */
+	
 if ( ! class_exists( 'WPToolKit' ) ) {
 
 	/**
@@ -97,13 +111,113 @@ $GLOBALS['wptoolkit'] = GK();
 //** Overrides actions set by Elegant Themes that prevents plugin and theme updates.
 function WPT_override_et() {
 	if(isset($GLOBALS['et_core_updates'])){
+		// lets override Elegant theme's
 		remove_action( 'pre_set_site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'check_plugins_updates' ));
 		remove_action( 'site_transient_update_plugins', array( $GLOBALS['et_core_updates'], 'add_plugins_to_update_notification' ));
 		remove_action( 'pre_set_site_transient_update_themes', array( $GLOBALS['et_core_updates'], 'check_themes_updates' ));
 		remove_action( 'site_transient_update_themes', array( $GLOBALS['et_core_updates'], 'add_themes_to_update_notification' ));
-	}
+	}	
 }
-add_action( 'admin_init', 'WPT_override_et',1000000 );
+add_action( 'admin_init', 'WPT_override_et',PHP_INT_MAX );
+
+
+//** Overrides actions set by WPMUDEV that prevents plugin and theme updates.
+function WPT_override_wpmudev() {
+	global $wp_filter;
+	
+	// lets override WPMU Dev's
+	foreach($wp_filter["plugins_api"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["plugins_api"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+	foreach($wp_filter["themes_api"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["themes_api"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+	foreach($wp_filter["site_transient_update_plugins"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["site_transient_update_plugins"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+	foreach($wp_filter["pre_set_site_transient_update_plugins"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["pre_set_site_transient_update_plugins"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+	foreach($wp_filter["site_transient_update_themes"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["site_transient_update_themes"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+	foreach($wp_filter["pre_set_site_transient_update_themes"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			foreach($arr["function"] as $ok => $obj){
+				if(is_object($obj)){
+					$subject = get_class($obj);
+					$pattern = '/WPMU/i';
+					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+						unset($wp_filter["pre_set_site_transient_update_themes"][$pk][$ak]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+	
+}
+add_action( 'admin_menu', 'WPT_override_wpmudev');
 
 function WPT_remote_download($url, $save_path = false){
 	// Use wp_remote_get to fetch the data
