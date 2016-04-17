@@ -3,7 +3,7 @@
  * Plugin Name: WP Toolkit
  * Plugin URI: https://wptoolkit.com/
  * Description: Premium Theme, Plugin & WooCommerce Extension Manager
- * Version: 1.2
+ * Version: 1.2.1
  * Author: WP Toolkit
  * Author URI:  https://wptoolkit.com/ 
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
@@ -218,6 +218,37 @@ function WPT_override_wpmudev() {
 	
 }
 add_action( 'admin_menu', 'WPT_override_wpmudev');
+
+//** Overrides actions set by WOOTHEMES nag
+function WPT_override_woothemes() {
+	global $wp_filter;
+	
+	// lets override Woothemes nag
+	foreach($wp_filter["admin_notices"] as $pk => $prio){
+		foreach($prio as $ak => $arr){
+			if(is_array($arr["function"]) ){
+				foreach($arr["function"] as $ok => $obj){
+					if(is_object($obj)){
+						$subject = get_class($obj);
+						$pattern = '/WOOTHEMES/i';
+						if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+							unset($wp_filter["admin_notices"][$pk][$ak]);
+							continue;
+						}
+					}
+				}
+			}else{
+				$subject = $arr["function"];
+				$pattern = '/WOOTHEMES/i';
+				if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
+					unset($wp_filter["admin_notices"][$pk][$ak]);
+					continue;
+				}
+			}
+		}
+	} 
+}
+add_action( 'admin_menu', 'WPT_override_woothemes');
 
 function WPT_remote_download($url, $save_path = false){
 	// Use wp_remote_get to fetch the data
