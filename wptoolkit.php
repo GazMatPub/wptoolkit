@@ -15,19 +15,19 @@
 	exit; // Exit if accessed directly
 }
 
-	/* Turns off WPMUDEV Nags */
-	if (!class_exists('WPMUDEV_Update_Notifications')) {
-		class WPMUDEV_Update_Notifications {
-			public function __construct() {}
-		}
+/* Turns off WPMUDEV Nags */
+if (!class_exists('WPMUDEV_Update_Notifications')) {
+	class WPMUDEV_Update_Notifications {
+		public function __construct() {}
 	}
+}
 
-	if ( !class_exists('WPMUDEV_Dashboard') ) {
-		class WPMUDEV_Dashboard {
-			public function __construct() {}
-		}
-	}	
-	/* ENDOF Turns off WPMUDEV Nags */
+if ( !class_exists('WPMUDEV_Dashboard') ) {
+	class WPMUDEV_Dashboard {
+		public function __construct() {}
+	}
+}	
+/* ENDOF Turns off WPMUDEV Nags */
 	
 if ( ! class_exists( 'WPToolKit' ) ) {
 
@@ -120,172 +120,10 @@ function WPT_override_et() {
 }
 add_action( 'admin_init', 'WPT_override_et',PHP_INT_MAX );
 
-
-//** Overrides actions set by WPMUDEV that prevents plugin and theme updates.
-function WPT_override_wpmudev() {
-	global $wp_filter;
-	
-	// lets override WPMU Dev's
-	foreach($wp_filter["plugins_api"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["plugins_api"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-	foreach($wp_filter["themes_api"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["themes_api"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-	foreach($wp_filter["site_transient_update_plugins"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["site_transient_update_plugins"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-	foreach($wp_filter["pre_set_site_transient_update_plugins"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["pre_set_site_transient_update_plugins"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-	foreach($wp_filter["site_transient_update_themes"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["site_transient_update_themes"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-	foreach($wp_filter["pre_set_site_transient_update_themes"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
-				if(is_object($obj)){
-					$subject = get_class($obj);
-					$pattern = '/WPMU/i';
-					if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-						unset($wp_filter["pre_set_site_transient_update_themes"][$pk][$ak]);
-						continue;
-					}
-				}
-			}
-		}
-	}
-	
-}
-add_action( 'admin_menu', 'WPT_override_wpmudev');
-
-//** Overrides actions set by WOOTHEMES nag
-function WPT_override_woothemes() {
-	global $wp_filter;
-	
-	// lets override Woothemes nag
-	foreach($wp_filter["admin_notices"] as $pk => $prio){
-		foreach($prio as $ak => $arr){
-			if(is_array($arr["function"]) ){
-				foreach($arr["function"] as $ok => $obj){
-					if(is_object($obj)){
-						$subject = get_class($obj);
-						$pattern = '/WOOTHEMES/i';
-						if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-							unset($wp_filter["admin_notices"][$pk][$ak]);
-							continue;
-						}
-					}
-				}
-			}else{
-				$subject = $arr["function"];
-				$pattern = '/WOOTHEMES/i';
-				if( preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE) ){
-					unset($wp_filter["admin_notices"][$pk][$ak]);
-					continue;
-				}
-			}
-		}
-	} 
-}
-add_action( 'admin_menu', 'WPT_override_woothemes');
-
-function WPT_remote_download($url, $save_path = false){
-	// Use wp_remote_get to fetch the data
-	$response = wp_remote_get($url, array("timeout" => PHP_INT_MAX));
-
-	// Save the body part to a variable
-	$zip = $response['body'];
-
-	
-	// In the header info is the name of the XML or CVS file. I used preg_match to find it
-	preg_match("/filename\s*=\s*(\\\"[^\\\"]*\\\"|'[^']*)/i", $response['headers']['content-disposition'], $match);
-
-	if($save_path){
-		// Create the name of the file and the declare the directory and path
-		$file = trailingslashit($save_path).$match[1];
-
-		// Now use the standard PHP file functions
-		$fp = fopen($file, "w");
-		fwrite($fp, $zip);
-		fclose($fp);
-		return true;
-	}else{
-		if($zip){
-			return array("filenam" => $match[1], "body" => $zip);
-		}else{ 
-			return false;
-		}
-	}
-}
-
-/*
-	This is used to force WPToolkit to update its lists of plugins and themes
-*/
+//** This is used to force WPToolkit to update its lists of plugins and themes
 function WPT_force_update_lists(){
 	WPToolKit_Updates::get_plugin_catalogue();
 	die();
 }
-
 add_action( 'wp_ajax_get_plugin_catalogue', "WPT_force_update_lists" );
 add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "WPT_force_update_lists");
