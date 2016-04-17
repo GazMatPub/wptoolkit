@@ -3,7 +3,7 @@
  * Plugin Name: WP Toolkit
  * Plugin URI: https://wptoolkit.com/
  * Description: Premium Theme, Plugin & WooCommerce Extension Manager
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: WP Toolkit
  * Author URI:  https://wptoolkit.com/ 
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
@@ -17,9 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 //** Make sure this plugin runs first
 function wpt_this_plugin_first() {
-	// ensure path to this file is via main wp plugin path
-	$wp_path_to_this_file = preg_replace('/(.*)plugins\/(.*)$/', WP_PLUGIN_DIR."/$2", __FILE__);
-	$this_plugin = plugin_basename(trim($wp_path_to_this_file));
+	$this_plugin = plugin_basename( __FILE__ );
 	$active_plugins = get_option('active_plugins');
 	$this_plugin_key = array_search($this_plugin, $active_plugins);
 	if ($this_plugin_key) { // if it's 0 it's the first plugin already, no need to continue
@@ -29,6 +27,7 @@ function wpt_this_plugin_first() {
 	}
 }
 add_action("activated_plugin", "wpt_this_plugin_first");
+add_action('upgrader_process_complete', 'wpt_this_plugin_first');
 
 //** Turns off WPMUDEV Dashboard Nags */
 if ( ! class_exists('WPMUDEV_Dashboard_Notice3') ) {
