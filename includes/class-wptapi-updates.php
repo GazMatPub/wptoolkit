@@ -119,7 +119,7 @@ class WPToolKit_Updates {
 	}
 
 	public static function get_plugin_catalogue() { 
-		$url = 'https://api.wptoolkit.com/?wptoolkit_repo=json&type=all';
+		$url = 'https://api.wptoolkit.com/?wptoolkit_repo=json&type=all&site_url=';
 		$request = wp_remote_post( $url, array('timeout' => 45) );  
 		if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
 	    	
