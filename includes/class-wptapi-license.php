@@ -26,7 +26,7 @@ class WPToolKit_Plugin_Manager {
 	/**
 	 * @var string
 	 */
-	public $version = '1.0.1';
+	public $version = 'xxx';
 
 	/**
 	 * @var string
@@ -172,6 +172,17 @@ class WPToolKit_Plugin_Manager {
 			 * $this->ame_domain = str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
 			 */
 			$this->ame_domain 				= str_ireplace( array( 'http://', 'https://' ), '', home_url() ); // blog domain name
+			
+			if($this->version == "xxx"){
+				$plugin_data = get_plugin_data( __FILE__ );
+				if ( is_array($plugin_data) ) {
+					$this->version = $plugin_data['Version'];
+				}
+			}else{
+				$this->version = "1.0.1";
+			}
+
+			
 			$this->ame_software_version 	= $this->version; // The software version
 			$this->ame_plugin_or_theme 		= 'plugin'; // 'theme' or 'plugin'
 
