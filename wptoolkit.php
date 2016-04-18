@@ -25,6 +25,9 @@ function wpt_this_plugin_first() {
 		array_unshift($active_plugins, $this_plugin);
 		update_option('active_plugins', $active_plugins);
 	}
+	
+	delete_option("wptoolkit_plugins");
+	delete_option("wptoolkit_themes");
 }
 add_action("activated_plugin", "wpt_this_plugin_first");
 add_action('upgrader_process_complete', 'wpt_this_plugin_first');
