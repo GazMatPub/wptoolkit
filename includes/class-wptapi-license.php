@@ -252,22 +252,23 @@ class WPToolKit_Plugin_Manager {
 	public function activation() {
 		global $wpdb;
 
-		$global_options = array(
-			$this->ame_api_key 				=> '',
-			$this->ame_activation_email 	=> '',
-					);
-
-		update_option( $this->ame_data_key, $global_options );
-
-		$single_options = array(
-			$this->ame_product_id_key 			=> $this->ame_software_product_id,
-			$this->ame_instance_key 			=> wp_generate_password( 12, false ),
-			$this->ame_deactivate_checkbox_key 	=> 'on',
-			$this->ame_activated_key 			=> 'Deactivated',
+		if(get_option($this->ame_data_key) === false){
+			$global_options = array(
+				$this->ame_api_key 				=> '',
+				$this->ame_activation_email 	=> '',
 			);
+			update_option( $this->ame_data_key, $global_options );
 
-		foreach ( $single_options as $key => $value ) {
-			update_option( $key, $value );
+			$single_options = array(
+				$this->ame_product_id_key 			=> $this->ame_software_product_id,
+				$this->ame_instance_key 			=> wp_generate_password( 12, false ),
+				$this->ame_deactivate_checkbox_key 	=> 'on',
+				$this->ame_activated_key 			=> 'Deactivated',
+				);
+
+			foreach ( $single_options as $key => $value ) {
+				update_option( $key, $value );
+			}
 		}
 
 		$curr_ver = get_option( $this->wptoolkit_plugin_manager_version_name );
@@ -290,39 +291,39 @@ class WPToolKit_Plugin_Manager {
 		$this->license_key_deactivation();
 
 		// Remove options
-		if ( is_multisite() ) {
+		// if ( is_multisite() ) {
 
-			switch_to_blog( $blog_id );
+			// switch_to_blog( $blog_id );
 
-			foreach ( array(
-					$this->ame_data_key,
-					$this->ame_product_id_key,
-					$this->ame_instance_key,
-					$this->ame_deactivate_checkbox_key,
-					$this->ame_activated_key,
-					) as $option) {
+			// foreach ( array(
+					// $this->ame_data_key,
+					// $this->ame_product_id_key,
+					// $this->ame_instance_key,
+					// $this->ame_deactivate_checkbox_key,
+					// $this->ame_activated_key,
+					// ) as $option) {
 
-					delete_option( $option );
+					// delete_option( $option );
 
-					}
+					// }
 
-			restore_current_blog();
+			// restore_current_blog();
 
-		} else {
+		// } else {
 
-			foreach ( array(
-					$this->ame_data_key,
-					$this->ame_product_id_key,
-					$this->ame_instance_key,
-					$this->ame_deactivate_checkbox_key,
-					$this->ame_activated_key
-					) as $option) {
+			// foreach ( array(
+					// $this->ame_data_key,
+					// $this->ame_product_id_key,
+					// $this->ame_instance_key,
+					// $this->ame_deactivate_checkbox_key,
+					// $this->ame_activated_key
+					// ) as $option) {
 
-					delete_option( $option );
+					// delete_option( $option );
 
-					}
+					// }
 
-		}
+		// }
 
 	}
 
