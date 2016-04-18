@@ -106,7 +106,7 @@ class WPToolKit_Plugin {
 			                            {
 			                                    $fstream = zip_entry_read($entry, zip_entry_filesize($entry));
 			                                    file_put_contents($file_path, $fstream );
-			                                    chmod($file_path, 0777);
+			                                    //chmod($file_path, 0777);
 			                            }
 			                            zip_entry_close($entry);
 			                    }
@@ -117,7 +117,7 @@ class WPToolKit_Plugin {
 			                            		if(!is_dir($file_path)){
 			                                    	mkdir($file_path);
 			                                    }
-			                                    chmod($file_path, 0777);
+			                                    //chmod($file_path, 0777);
 			                            }
 			                    }
 			            }
