@@ -158,6 +158,7 @@ class WPToolKit_Plugin_Manager_Update_API_Check {
 			'activation_email'	=>	$this->activation_email,
 			'instance'			=>	$this->instance,
 			'domain'			=>	$this->domain,
+			'site_url'			=>	$this->domain,
 			'software_version'	=>	$this->software_version,
 			'extra'				=> 	$this->extra,
 		);
