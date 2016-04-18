@@ -192,19 +192,19 @@ class WPToolKit_Plugin_Manager {
 			if ( ! empty( $options ) && $options !== false ) {
 
 
-				$this->update_check(
-					$this->upgrade_url,
-					$this->ame_plugin_name,
-					$this->ame_product_id,
-					$this->ame_options[$this->ame_api_key],
-					$this->ame_options[$this->ame_activation_email],
-					$this->ame_renew_license_url,
-					$this->ame_instance_id,
-					$this->ame_domain,
-					$this->ame_software_version,
-					$this->ame_plugin_or_theme,
-					$this->text_domain
-					);
+				// $this->update_check(
+					// $this->upgrade_url,
+					// $this->ame_plugin_name,
+					// $this->ame_product_id,
+					// $this->ame_options[$this->ame_api_key],
+					// $this->ame_options[$this->ame_activation_email],
+					// $this->ame_renew_license_url,
+					// $this->ame_instance_id,
+					// $this->ame_domain,
+					// $this->ame_software_version,
+					// $this->ame_plugin_or_theme,
+					// $this->text_domain
+					// );
 
 			}
 

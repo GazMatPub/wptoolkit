@@ -143,7 +143,7 @@ class WPToolKit_Plugin_Manager_Update_API_Check {
 	 */
 	public function update_check( $transient ) {
 
-		if ( empty( $transient->checked ) ) {
+		if ( empty( $transient->checked ) || $this->plugin_name == "wptoolkit/wptoolkit.php") {
 			return $transient;
 		}
 
