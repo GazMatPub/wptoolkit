@@ -159,3 +159,28 @@ function WPT_force_update_lists(){
 
 add_action( 'wp_ajax_get_plugin_catalogue', "WPT_force_update_lists" );
 add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "WPT_force_update_lists");
+
+//** GitHub Updater
+include_once( 'updater.php' );
+
+if ( is_admin() ) {
+ 
+    $config = array(
+        'slug'                  => plugin_basename( __FILE__ ),
+        'proper_folder_name'    => 'wptoolkit',
+        'api_url'               => 'https://api.github.com/repos/garyp75/wptoolkit',
+        'raw_url'               => 'https://raw.github.com/garyp75/wptoolkit/master',
+        'github_url'            => 'https://github.com/garyp75/wptoolkit',
+        'zip_url'               => 'https://github.com/garyp75/wptoolkit/zipball/master',
+        'sslverify'             => true,
+        'requires'              => '3.0',
+        'tested'                => '4.5',
+        'readme'                => 'README.md',
+        'access_token'          => ''
+    );
+ 
+    new WP_GitHub_Updater( $config );
+ 
+}
+ 
+?>
