@@ -9,6 +9,7 @@
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ * GitHub Plugin URI: garyp75/wptoolkit
  */
  
 if ( ! defined( 'ABSPATH' ) ) {
