@@ -157,7 +157,7 @@ class WPTAPI_Admin {
 								}
 		                	?>
 		                		
-		                        <li class="gkititem mix <?php echo implode(' ', $item_category); ?>">
+		                        <li class="gkititem mix <?php echo implode(' ', (array)$item_category); ?>">
 		                            <div class="gk-plugin-wrapper">
 		                                <span class="gk-plugin-title"><?php echo $item_name; ?></span>
 		                                <div class="gk-plugin-inner"><p><?php echo strip_tags($item_description, '<cite>'); ?></p></div> 
