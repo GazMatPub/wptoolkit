@@ -3,7 +3,7 @@
  * Plugin Name: WP Toolkit
  * Plugin URI: https://wptoolkit.com/
  * Description: Premium Theme, Plugin & WooCommerce Extension Manager
- * Version: 1.2.6
+ * Version: 1.2.7
  * Author: WP Toolkit
  * Author URI:  https://wptoolkit.com/ 
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
