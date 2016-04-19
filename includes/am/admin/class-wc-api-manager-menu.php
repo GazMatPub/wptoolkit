@@ -37,7 +37,9 @@ class WPToolKit_Plugin_Manager_MENU {
 	// Draw option page
 	public function config_page() {
 		// $settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain ), WPT()->ame_deactivation_tab_key => __( WPT()->ame_menu_tab_deactivation_title, WPT()->text_domain ) ); 
-		$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain )); 
+		
+		// Hide Deactivation tab and ADD Nag Override tab
+		$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain), WPT()->wpt_nag_override_tab_key => __( "Override Nags", WPT()->text_domain)  ); 
 		//$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain ) );
 		$current_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : WPT()->ame_activation_tab_key;
 		$tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : WPT()->ame_activation_tab_key;
@@ -61,11 +63,15 @@ class WPToolKit_Plugin_Manager_MENU {
 							settings_fields( WPT()->ame_data_key );
 							do_settings_sections( WPT()->ame_activation_tab_key );
 							submit_button( __( 'Save Changes', WPT()->text_domain ) );
-					} else {
-							settings_fields( WPT()->ame_deactivate_checkbox );
-							do_settings_sections( WPT()->ame_deactivation_tab_key );
+					} elseif( $tab == WPT()->wpt_nag_override_tab_key ) { // Nag Override tab
+							settings_fields( WPT()->wpt_nag_data_key );
+							do_settings_sections( WPT()->wpt_nag_override_tab_key );
 							submit_button( __( 'Save Changes', WPT()->text_domain ) );
-					}
+					} //else { // Deactivation tab
+							// settings_fields( WPT()->ame_deactivate_checkbox );
+							// do_settings_sections( WPT()->ame_deactivation_tab_key );
+							// submit_button( __( 'Save Changes', WPT()->text_domain ) );
+					// }
 				?>
 					</div>
 				</form>
@@ -81,10 +87,50 @@ class WPToolKit_Plugin_Manager_MENU {
 		add_settings_field( WPT()->ame_api_key, __( 'WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_api_key_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key);
 		// Activation settings
-		register_setting( WPT()->ame_deactivate_checkbox, WPT()->ame_deactivate_checkbox, array( $this, 'wc_am_license_key_deactivation' ) );
-		add_settings_section( 'deactivate_button', __( 'WPToolKit License Deactivation', WPT()->text_domain ), array( $this, 'wc_am_deactivate_text' ), WPT()->ame_deactivation_tab_key );
-		add_settings_field( 'deactivate_button', __( 'Deactivate WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), WPT()->ame_deactivation_tab_key, 'deactivate_button' );
+		// register_setting( WPT()->ame_deactivate_checkbox, WPT()->ame_deactivate_checkbox, array( $this, 'wc_am_license_key_deactivation' ) );
+		// add_settings_section( 'deactivate_button', __( 'WPToolKit License Deactivation', WPT()->text_domain ), array( $this, 'wc_am_deactivate_text' ), WPT()->ame_deactivation_tab_key );
+		// add_settings_field( 'deactivate_button', __( 'Deactivate WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), WPT()->ame_deactivation_tab_key, 'deactivate_button' );
+		
+		//Nag Override settings
+		register_setting( WPT()->wpt_nag_data_key, WPT()->wpt_nag_data_key, "" );
+		add_settings_section( WPT()->wpt_nag_data_key."_section", __( 'Override Nags', WPT()->text_domain ), array( $this, 'wpt_nag_section_text' ), WPT()->wpt_nag_override_tab_key );
+		add_settings_field( "wpt_nag_override_wpmudev", __( 'Disable WPMU Dev updater nag', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_elegantthemes", __( 'Disable Elegant Themes updater nag', WPT()->text_domain ),  array( $this, 'wpt_nag_override_elegantthemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_woothemes", __( 'Disable WooThemes updater nag', WPT()->text_domain ), array( $this, 'wpt_nag_override_woothemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 	}
+	
+	//Generates form for Disable WPMU Dev updater nag checkbox
+	public function wpt_nag_override_wpmudev_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_wpmudev" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_wpmudev]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_wpmudev"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable WPMU Dev updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	//Generates form for Disable Elegant Themes updater nag checkbox
+	public function wpt_nag_override_elegantthemes_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_elegantthemes" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_elegantthemes]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_elegantthemes"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable Elegant Themes updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	//Generates form for Disable WooThemes updater nag checkbox
+	public function wpt_nag_override_woothemes_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_woothemes" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_woothemes]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_woothemes"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable WooThemes updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	// Provides text for Nag section
+	public function wpt_nag_section_text() {
+		//
+	}
+	
 	// Provides text for api key section
 	public function wc_am_api_key_text() {
 		//

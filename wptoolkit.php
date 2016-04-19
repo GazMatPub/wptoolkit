@@ -35,21 +35,31 @@ add_action('upgrader_process_complete', 'wpt_this_plugin_first');
 add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_plugin_catalogue"));
 add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_theme_catalogue"));
 
+$wptoolkit_plugin_manager_nag_data = get_option( "wptoolkit_plugin_manager_nag_data" );
 //** Turns off WPMUDEV Dashboard Nags */
 if ( ! class_exists('WPMUDEV_Dashboard_Notice3') ) {
-	class WPMUDEV_Dashboard_Notice3 {}
+	$wpmu_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_wpmudev"];
+
+	if($wpmu_nag !== false && $wpmu_nag == "on"){
+		class WPMUDEV_Dashboard_Notice3 {}
+	}
 }
 
 //** Turn Off Elegant Themes updates class.
 if ( ! class_exists( 'ET_Core_Updates' ) ) {
-   	class ET_Core_Updates {}
+	$et_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_elegantthemes"];
+	if($et_nag !== false && $et_nag == "on"){
+		class ET_Core_Updates {}
+	}
 }
 
 //** Turn Off Woo Updater Nags
 if ( ! function_exists( 'woothemes_updater_notice' ) ) {
-	function woothemes_updater_notice() {}
+	$woothemes_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_woothemes"];
+	if($woothemes_nag !== false && $woothemes_nag == "on"){
+		function woothemes_updater_notice() {}
+	}
 }
-	
 if ( ! class_exists( 'WPToolKit' ) ) {
 
 	/**
