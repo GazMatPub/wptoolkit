@@ -151,11 +151,18 @@ class WPToolKit_Plugin_Manager {
 			$this->ame_settings_title 				= 'WP Toolkit Dashboard';
 			$this->ame_menu_tab_activation_title 	= __( 'License Activation', 'wptoolkit-plugin-manager' );
 			$this->ame_menu_tab_deactivation_title 	= __( 'License Deactivation', 'wptoolkit-plugin-manager' );
-
+			
+			/**
+			* Set date for Nag setting
+			*/
+			$this->wpt_nag_override_tab_key 	= 'wptoolkit_plugin_manager_nag_override';
+			$this->wpt_nag_data_key 			= 'wptoolkit_plugin_manager_nag_data';
+			
 			/**
 			 * Set all software update data here
 			 */
 			$this->ame_options 				= get_option( $this->ame_data_key );
+			$this->nag_options 				= get_option( $this->wpt_nag_data_key );// get Options for Override Nag settings
 			$this->ame_plugin_name 			= 'wptoolkit/wptoolkit.php'; // same as plugin slug. if a theme use a theme name like 'twentyeleven'
 			$this->ame_product_id 			= get_option( $this->ame_product_id_key ); // Software Title
 			$this->ame_renew_license_url 	= 'https://api.wptoolkit.com/my-account'; // URL to renew a license. Trailing slash in the upgrade_url is required.
