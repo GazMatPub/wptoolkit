@@ -32,6 +32,9 @@ function wpt_this_plugin_first() {
 add_action("activated_plugin", "wpt_this_plugin_first");
 add_action('upgrader_process_complete', 'wpt_this_plugin_first');
 
+add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_plugin_catalogue"));
+add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_theme_catalogue"));
+
 //** Turns off WPMUDEV Dashboard Nags */
 if ( ! class_exists('WPMUDEV_Dashboard_Notice3') ) {
 	class WPMUDEV_Dashboard_Notice3 {}

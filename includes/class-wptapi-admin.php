@@ -65,9 +65,9 @@ class WPTAPI_Admin {
 		}
 
 		if ($type != "theme" && !get_option('wptoolkit_plugins')) {
-			WPToolKit_Updates::get_plugin_catalogue();
+			WPToolKit_Updates::get_plugin_catalogue(false);
 		}elseif($type == "theme" && !get_option('wptoolkit_themes')) {
-			WPToolKit_Updates::get_theme_catalogue();
+			WPToolKit_Updates::get_theme_catalogue(false);
 		}
 	
 
