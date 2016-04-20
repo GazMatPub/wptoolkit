@@ -137,7 +137,7 @@ class WPToolKit_Plugin {
 		    } else {
 				unlink($target_path);
 				// var_dump($file);
-		    	return "Error 1001 ". $url; // 1001 failed to put zip file in directory
+		    	return "Error 1001 "; // 1001 failed to put zip file in directory
 		    }
 	    }
 	    return 'Installed';
