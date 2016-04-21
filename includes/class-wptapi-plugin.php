@@ -67,7 +67,6 @@ class WPToolKit_Plugin {
 			$item_dir = dirname($wptoolkit_plugins[$plugin][$file_key]);
 	    	$path = $args['path'].$item_dir.'.zip';
 
-	    	// if (file_exists($args['path'].$plugin)) {
 	    	if (file_exists($args['path'].$item_dir)) {
 		    	return "Error 1003"; // Plugin already existed
 	    	}
@@ -75,18 +74,6 @@ class WPToolKit_Plugin {
 	    	if ( $wptoolkit_plugins[$plugin]['free'] != 1 && get_option( 'wptoolkit_plugin_manager_activated' ) != 'Activated' ) {
 	    		return "Error 1006";
 	    	}
-
-	    	// $ch = curl_init($url);
-			// curl_setopt($ch, CURLOPT_TIMEOUT, 45);
-		    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		    // curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6');
-		    // $data = curl_exec($ch); 
-		    // if(curl_errno($ch))
-			// {
-		    	// return "Error 1002"; // 1002 failed to download plugin from URL
-			// }
-
-		    // curl_close($ch);
 		    
 			$file = WPT_remote_download($url);
 			

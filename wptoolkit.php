@@ -167,12 +167,34 @@ function WPT_remote_download($url, $save_path = false){
 	}
 }
 
+//** Force Wordpress from downloading WPToolkit plugins from our repo
+function WPT_updater( $api, $action, $args ) {
+	if( $action == 'plugin_information' && empty( $api ) && isset($_GET["type"]) && $_GET["type"] == "WPT" ){
+		
+		$wptoolkit_plugins = get_option('wptoolkit_plugins');
+		$the_plugin = $wptoolkit_plugins[$_GET["plugin"]];
+		
+		$wptoolkit_licence_manager = get_option('wptoolkit_plugin_manager');
+		$email = $wptoolkit_licence_manager['activation_email'];
+		$licence_key = $wptoolkit_licence_manager['api_key'];
+		
+		$slug = $the_plugin["plugin_id"];
+		
+		$res                = new stdClass();
+		$res->name          = $the_plugin['name'];
+		$res->version       = $the_plugin['version'];
+		$res->download_link = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key;
+		$res->tested = '10.0';
+	}
+	return $res;
+}
+add_filter( 'plugins_api', "WPT_updater", 100, 3);
+
 //** Force WPToolkit to update its lists of plugins and themes
 function WPT_force_update_lists(){
 	WPToolKit_Updates::get_plugin_catalogue();
 	die();
 }
-
 add_action( 'wp_ajax_get_plugin_catalogue', "WPT_force_update_lists" );
 add_action( 'wp_ajax_nopriv_get_plugin_catalogue', "WPT_force_update_lists");
 
