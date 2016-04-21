@@ -185,8 +185,9 @@ function WPT_updater( $api, $action, $args ) {
 		$res->version       = $the_plugin['version'];
 		$res->download_link = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key;
 		$res->tested = '10.0';
+		return $res;
 	}
-	return $res;
+	return $api;
 }
 add_filter( 'plugins_api', "WPT_updater", 100, 3);
 

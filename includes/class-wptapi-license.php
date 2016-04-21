@@ -259,6 +259,15 @@ class WPToolKit_Plugin_Manager {
 	public function activation() {
 		global $wpdb;
 
+		if(get_option( $this->wpt_nag_data_key ) === false){
+			$nag_options = array(
+				"wpt_nag_override_wpmudev"			=> 'on',
+				"wpt_nag_override_elegantthemes"	=> 'on',
+				"wpt_nag_override_woothemes"		=> 'on',
+			);
+			update_option( $this->wpt_nag_data_key, $nag_options );
+		}
+		
 		if(get_option($this->ame_data_key) === false){
 			$global_options = array(
 				$this->ame_api_key 				=> '',
