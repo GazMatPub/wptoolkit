@@ -119,12 +119,16 @@ class WPTAPI_Admin {
 							$label = "plugin";
 							$dir_root = WP_PLUGIN_DIR;
 							$file_key = "Plugin_file";
+							$nonce_prefix = "install-plugin_";
+							$install_action = "install-plugin&plugin=";
 						}elseif($type == "theme"){
 							$wptoolkit_items = get_option('wptoolkit_themes');
 							$label = "theme";
 							$curr_theme = get_current_theme ();
 							$dir_root = get_theme_root();
 							$file_key = "Theme_file";
+							$nonce_prefix = "install-theme_";
+							$install_action = "install-theme&theme=";
 						}
 		
 	                	if(is_array($wptoolkit_items)) {
@@ -176,7 +180,7 @@ class WPTAPI_Admin {
 
 	                            		<?php } else { ?>
 	                            			<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin type-<?php echo $type; ?>" value="Install">Install</button --> 
-											<a href="<?php echo admin_url('update.php')?>?action=install-plugin&plugin=<?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce("install-plugin_".$key);?>&type=WPT" class="button install-plugin">New Install</a> 
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin">New Install</a> 
 	                            		<?php } ?>
 		                            </div>
 		                        </li>
