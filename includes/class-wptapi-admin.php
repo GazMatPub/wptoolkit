@@ -65,9 +65,9 @@ class WPTAPI_Admin {
 		}
 
 		if ($type != "theme" && !get_option('wptoolkit_plugins')) {
-			WPToolKit_Updates::get_plugin_catalogue();
+			WPToolKit_Updates::get_plugin_catalogue(false);
 		}elseif($type == "theme" && !get_option('wptoolkit_themes')) {
-			WPToolKit_Updates::get_theme_catalogue();
+			WPToolKit_Updates::get_theme_catalogue(false);
 		}
 	
 
@@ -158,9 +158,9 @@ class WPTAPI_Admin {
 		                	?>
 		                		
 		                        <li class="gkititem mix <?php echo implode(' ', (array)$item_category); ?>">
-		                            <div class="gk-plugin-wrapper">
-		                                <span class="gk-plugin-title"><?php echo $item_name; ?></span>
-		                                <div class="gk-plugin-inner"><p><?php echo strip_tags($item_description, '<cite>'); ?></p></div> 
+		                            <div class="wpt-plugin-wrapper">
+		                                <span class="wpt-plugin-title"><?php echo $item_name; ?></span>
+		                                <div class="wpt-plugin-inner"><p><?php echo strip_tags($item_description, '<cite>'); ?></p></div> 
 
 	                            		<?php if ($item_active) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-activated" value="Activated" disabled>Activated</button>
@@ -175,7 +175,8 @@ class WPTAPI_Admin {
 	                            			<button type="submit" id="install" class="button install-plugin pl-licence-required" value="Install" disabled>A License key is required to install this <?php echo $label; ?></button>
 
 	                            		<?php } else { ?>
-	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin type-<?php echo $type; ?>" value="Install">Install</button> 
+	                            			<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin type-<?php echo $type; ?>" value="Install">Install</button --> 
+											<a href="<?php echo admin_url('update.php')?>?action=install-plugin&plugin=<?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce("install-plugin_".$key);?>&type=WPT" class="button install-plugin">New Install</a> 
 	                            		<?php } ?>
 		                            </div>
 		                        </li>
@@ -194,35 +195,35 @@ class WPTAPI_Admin {
 	    
 	    <script type="text/javascript">
 	        jQuery(document).ready(function($) {  
-	        	$(".install-plugin").click(function(e) {
-	        		var installButton = jQuery(this);
-	        		e.preventDefault();
-					var data = {};
-					if(installButton.hasClass("type-theme")){
-						data = {
-							'action': 'wptoolkit_install_theme',
-							'theme': $(this).attr('data-plugin')
-						};
-					}else{
-						data = {
-							'action': 'wptoolkit_install_plugin',
-							'plugin': $(this).attr('data-plugin')
-						};
-					}
-					var spinner = $("<img src='<?php echo plugins_url( '../assets/images/ajax-loader.gif' , __FILE__ ); ?>' />").insertAfter(this);
+	        	// $(".install-plugin").click(function(e) {
+	        		// var installButton = jQuery(this);
+	        		// e.preventDefault();
+					// var data = {};
+					// if(installButton.hasClass("type-theme")){
+						// data = {
+							// 'action': 'wptoolkit_install_theme',
+							// 'theme': $(this).attr('data-plugin')
+						// };
+					// }else{
+						// data = {
+							// 'action': 'wptoolkit_install_plugin',
+							// 'plugin': $(this).attr('data-plugin')
+						// };
+					// }
+					// var spinner = $("<img src='<?php echo plugins_url( '../assets/images/ajax-loader.gif' , __FILE__ ); ?>' />").insertAfter(this);
 
-					jQuery.post(ajaxurl, data, function(response) {
+					// jQuery.post(ajaxurl, data, function(response) {
 
-							installButton.prop('disabled', true);
-				   			installButton.text(response);
-				   			if (response == 'Installed') {
-				   				installButton.addClass('pl-installed');
-				   			}
+							// installButton.prop('disabled', true);
+				   			// installButton.text(response);
+				   			// if (response == 'Installed') {
+				   				// installButton.addClass('pl-installed');
+				   			// }
 						
-					    spinner.remove();  
-					});
+					    // spinner.remove();  
+					// });
 
-	        	});
+	        	// });
 
 	            $(function(){  
 	                $('#Container').mixItUp();

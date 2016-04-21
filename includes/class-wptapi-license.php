@@ -151,11 +151,18 @@ class WPToolKit_Plugin_Manager {
 			$this->ame_settings_title 				= 'WP Toolkit Dashboard';
 			$this->ame_menu_tab_activation_title 	= __( 'License Activation', 'wptoolkit-plugin-manager' );
 			$this->ame_menu_tab_deactivation_title 	= __( 'License Deactivation', 'wptoolkit-plugin-manager' );
-
+			
+			/**
+			* Set date for Nag setting
+			*/
+			$this->wpt_nag_override_tab_key 	= 'wptoolkit_plugin_manager_nag_override';
+			$this->wpt_nag_data_key 			= 'wptoolkit_plugin_manager_nag_data';
+			
 			/**
 			 * Set all software update data here
 			 */
 			$this->ame_options 				= get_option( $this->ame_data_key );
+			$this->nag_options 				= get_option( $this->wpt_nag_data_key );// get Options for Override Nag settings
 			$this->ame_plugin_name 			= 'wptoolkit/wptoolkit.php'; // same as plugin slug. if a theme use a theme name like 'twentyeleven'
 			$this->ame_product_id 			= get_option( $this->ame_product_id_key ); // Software Title
 			$this->ame_renew_license_url 	= 'https://api.wptoolkit.com/my-account'; // URL to renew a license. Trailing slash in the upgrade_url is required.
@@ -192,19 +199,19 @@ class WPToolKit_Plugin_Manager {
 			if ( ! empty( $options ) && $options !== false ) {
 
 
-				$this->update_check(
-					$this->upgrade_url,
-					$this->ame_plugin_name,
-					$this->ame_product_id,
-					$this->ame_options[$this->ame_api_key],
-					$this->ame_options[$this->ame_activation_email],
-					$this->ame_renew_license_url,
-					$this->ame_instance_id,
-					$this->ame_domain,
-					$this->ame_software_version,
-					$this->ame_plugin_or_theme,
-					$this->text_domain
-					);
+				// $this->update_check(
+					// $this->upgrade_url,
+					// $this->ame_plugin_name,
+					// $this->ame_product_id,
+					// $this->ame_options[$this->ame_api_key],
+					// $this->ame_options[$this->ame_activation_email],
+					// $this->ame_renew_license_url,
+					// $this->ame_instance_id,
+					// $this->ame_domain,
+					// $this->ame_software_version,
+					// $this->ame_plugin_or_theme,
+					// $this->text_domain
+					// );
 
 			}
 
@@ -252,22 +259,23 @@ class WPToolKit_Plugin_Manager {
 	public function activation() {
 		global $wpdb;
 
-		$global_options = array(
-			$this->ame_api_key 				=> '',
-			$this->ame_activation_email 	=> '',
-					);
-
-		update_option( $this->ame_data_key, $global_options );
-
-		$single_options = array(
-			$this->ame_product_id_key 			=> $this->ame_software_product_id,
-			$this->ame_instance_key 			=> wp_generate_password( 12, false ),
-			$this->ame_deactivate_checkbox_key 	=> 'on',
-			$this->ame_activated_key 			=> 'Deactivated',
+		if(get_option($this->ame_data_key) === false){
+			$global_options = array(
+				$this->ame_api_key 				=> '',
+				$this->ame_activation_email 	=> '',
 			);
+			update_option( $this->ame_data_key, $global_options );
 
-		foreach ( $single_options as $key => $value ) {
-			update_option( $key, $value );
+			$single_options = array(
+				$this->ame_product_id_key 			=> $this->ame_software_product_id,
+				$this->ame_instance_key 			=> wp_generate_password( 12, false ),
+				$this->ame_deactivate_checkbox_key 	=> 'on',
+				$this->ame_activated_key 			=> 'Deactivated',
+				);
+
+			foreach ( $single_options as $key => $value ) {
+				update_option( $key, $value );
+			}
 		}
 
 		$curr_ver = get_option( $this->wptoolkit_plugin_manager_version_name );
@@ -290,39 +298,39 @@ class WPToolKit_Plugin_Manager {
 		$this->license_key_deactivation();
 
 		// Remove options
-		if ( is_multisite() ) {
+		// if ( is_multisite() ) {
 
-			switch_to_blog( $blog_id );
+			// switch_to_blog( $blog_id );
 
-			foreach ( array(
-					$this->ame_data_key,
-					$this->ame_product_id_key,
-					$this->ame_instance_key,
-					$this->ame_deactivate_checkbox_key,
-					$this->ame_activated_key,
-					) as $option) {
+			// foreach ( array(
+					// $this->ame_data_key,
+					// $this->ame_product_id_key,
+					// $this->ame_instance_key,
+					// $this->ame_deactivate_checkbox_key,
+					// $this->ame_activated_key,
+					// ) as $option) {
 
-					delete_option( $option );
+					// delete_option( $option );
 
-					}
+					// }
 
-			restore_current_blog();
+			// restore_current_blog();
 
-		} else {
+		// } else {
 
-			foreach ( array(
-					$this->ame_data_key,
-					$this->ame_product_id_key,
-					$this->ame_instance_key,
-					$this->ame_deactivate_checkbox_key,
-					$this->ame_activated_key
-					) as $option) {
+			// foreach ( array(
+					// $this->ame_data_key,
+					// $this->ame_product_id_key,
+					// $this->ame_instance_key,
+					// $this->ame_deactivate_checkbox_key,
+					// $this->ame_activated_key
+					// ) as $option) {
 
-					delete_option( $option );
+					// delete_option( $option );
 
-					}
+					// }
 
-		}
+		// }
 
 	}
 

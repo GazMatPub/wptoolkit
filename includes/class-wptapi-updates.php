@@ -118,8 +118,8 @@ class WPToolKit_Updates {
 
 	}
 
-	public static function get_plugin_catalogue() { 
-		$url = 'https://api.wptoolkit.com/?wptoolkit_repo=json&type=all';
+	public static function get_plugin_catalogue($output = true) { 
+		$url = 'https://api.wptoolkit.com/?wptoolkit_repo=json&type=all&site_url=';
 		$request = wp_remote_post( $url, array('timeout' => 45) );  
 		if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
 	    	
@@ -127,13 +127,15 @@ class WPToolKit_Updates {
 
 	    	if( $json !== null ) {
 		    	update_option('wptoolkit_plugins', $json);
-				echo $request['body'];
+				if($output){
+					echo $request['body'];
+				}
 	    	} // return json
 	    	
 	    }
 	}
 	
-	public static function get_theme_catalogue() { 
+	public static function get_theme_catalogue($output = false) { 
 		$url = 'https://api.wptoolkit.com/?wptoolkit_repo=json&type=themes';
 		$request = wp_remote_post( $url, array('timeout' => 45) );  
 		if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
@@ -141,7 +143,9 @@ class WPToolKit_Updates {
 	    	$json = json_decode( $request['body'], true ); // attempt decode
 	    	if( $json !== null ) {
 		    	update_option('wptoolkit_themes', $json);
-				echo $request['body'];
+				if($output){
+					echo $request['body'];
+				}
 	    	} // return json
 	    	
 	    }

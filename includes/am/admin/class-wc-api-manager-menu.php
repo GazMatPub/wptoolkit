@@ -36,7 +36,10 @@ class WPToolKit_Plugin_Manager_MENU {
 	}
 	// Draw option page
 	public function config_page() {
-		$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain ), WPT()->ame_deactivation_tab_key => __( WPT()->ame_menu_tab_deactivation_title, WPT()->text_domain ) ); 
+		// $settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain ), WPT()->ame_deactivation_tab_key => __( WPT()->ame_menu_tab_deactivation_title, WPT()->text_domain ) ); 
+		
+		// Hide Deactivation tab and ADD Nag Override tab
+		$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain), WPT()->wpt_nag_override_tab_key => __( "Override Nags", WPT()->text_domain)  ); 
 		//$settings_tabs = array( WPT()->ame_activation_tab_key => __( WPT()->ame_menu_tab_activation_title, WPT()->text_domain ) );
 		$current_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : WPT()->ame_activation_tab_key;
 		$tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : WPT()->ame_activation_tab_key;
@@ -60,11 +63,15 @@ class WPToolKit_Plugin_Manager_MENU {
 							settings_fields( WPT()->ame_data_key );
 							do_settings_sections( WPT()->ame_activation_tab_key );
 							submit_button( __( 'Save Changes', WPT()->text_domain ) );
-					} else {
-							settings_fields( WPT()->ame_deactivate_checkbox );
-							do_settings_sections( WPT()->ame_deactivation_tab_key );
+					} elseif( $tab == WPT()->wpt_nag_override_tab_key ) { // Nag Override tab
+							settings_fields( WPT()->wpt_nag_data_key );
+							do_settings_sections( WPT()->wpt_nag_override_tab_key );
 							submit_button( __( 'Save Changes', WPT()->text_domain ) );
-					}
+					} //else { // Deactivation tab
+							// settings_fields( WPT()->ame_deactivate_checkbox );
+							// do_settings_sections( WPT()->ame_deactivation_tab_key );
+							// submit_button( __( 'Save Changes', WPT()->text_domain ) );
+					// }
 				?>
 					</div>
 				</form>
@@ -72,7 +79,7 @@ class WPToolKit_Plugin_Manager_MENU {
 			<?php
 	}
 	// Register settings
-	public function load_settings() {
+	public function load_settings() { 
 		register_setting( WPT()->ame_data_key, WPT()->ame_data_key, array( $this, 'validate_options' ) );
 		// API Key
 		add_settings_section( WPT()->ame_api_key, __( 'WPToolKit License Activation', WPT()->text_domain ), array( $this, 'wc_am_api_key_text' ), WPT()->ame_activation_tab_key );
@@ -80,10 +87,50 @@ class WPToolKit_Plugin_Manager_MENU {
 		add_settings_field( WPT()->ame_api_key, __( 'WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_api_key_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key);
 		// Activation settings
-		register_setting( WPT()->ame_deactivate_checkbox, WPT()->ame_deactivate_checkbox, array( $this, 'wc_am_license_key_deactivation' ) );
-		add_settings_section( 'deactivate_button', __( 'WPToolKit License Deactivation', WPT()->text_domain ), array( $this, 'wc_am_deactivate_text' ), WPT()->ame_deactivation_tab_key );
-		add_settings_field( 'deactivate_button', __( 'Deactivate WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), WPT()->ame_deactivation_tab_key, 'deactivate_button' );
+		// register_setting( WPT()->ame_deactivate_checkbox, WPT()->ame_deactivate_checkbox, array( $this, 'wc_am_license_key_deactivation' ) );
+		// add_settings_section( 'deactivate_button', __( 'WPToolKit License Deactivation', WPT()->text_domain ), array( $this, 'wc_am_deactivate_text' ), WPT()->ame_deactivation_tab_key );
+		// add_settings_field( 'deactivate_button', __( 'Deactivate WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_deactivate_textarea' ), WPT()->ame_deactivation_tab_key, 'deactivate_button' );
+		
+		//Nag Override settings
+		register_setting( WPT()->wpt_nag_data_key, WPT()->wpt_nag_data_key, "" );
+		add_settings_section( WPT()->wpt_nag_data_key."_section", __( 'Override Nags', WPT()->text_domain ), array( $this, 'wpt_nag_section_text' ), WPT()->wpt_nag_override_tab_key );
+		add_settings_field( "wpt_nag_override_wpmudev", __( 'Disable WPMU Dev updater nag', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_elegantthemes", __( 'Disable Elegant Themes updater nag', WPT()->text_domain ),  array( $this, 'wpt_nag_override_elegantthemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_woothemes", __( 'Disable WooThemes updater nag', WPT()->text_domain ), array( $this, 'wpt_nag_override_woothemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 	}
+	
+	//Generates form for Disable WPMU Dev updater nag checkbox
+	public function wpt_nag_override_wpmudev_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_wpmudev" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_wpmudev]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_wpmudev"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable WPMU Dev updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	//Generates form for Disable Elegant Themes updater nag checkbox
+	public function wpt_nag_override_elegantthemes_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_elegantthemes" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_elegantthemes]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_elegantthemes"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable Elegant Themes updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	//Generates form for Disable WooThemes updater nag checkbox
+	public function wpt_nag_override_woothemes_input(){
+		echo '<input type="checkbox" id="wpt_nag_override_woothemes" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_woothemes]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_woothemes"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Disable WooThemes updater nag.', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	// Provides text for Nag section
+	public function wpt_nag_section_text() {
+		//
+	}
+	
 	// Provides text for api key section
 	public function wc_am_api_key_text() {
 		//
@@ -98,7 +145,7 @@ class WPToolKit_Plugin_Manager_MENU {
 	}
 	// Returns API License text field
 	public function wc_am_api_key_field() {
-		echo "<input id='api_key' name='" . WPT()->ame_data_key . "[" . WPT()->ame_api_key ."]' size='25' type='text' value='" . WPT()->ame_options[WPT()->ame_api_key] . "' />";
+		echo "<input id='api_key' name='" . WPT()->ame_data_key . "[" . WPT()->ame_api_key ."]' size='25' type='text' value='" . WPT()->ame_options[WPT()->ame_api_key] . "' required />";
 		if ( WPT()->ame_options[WPT()->ame_api_key] ) {
 			echo "<span class='dashicons dashicons-yes' style='color: #66ab03;'></span>";
 		} else {
@@ -107,7 +154,7 @@ class WPToolKit_Plugin_Manager_MENU {
 	}
 	// Returns API License email text field
 	public function wc_am_api_email_field() {
-		echo "<input id='activation_email' name='" . WPT()->ame_data_key . "[" . WPT()->ame_activation_email ."]' size='25' type='text' value='" . WPT()->ame_options[WPT()->ame_activation_email] . "' />";
+		echo "<input id='activation_email' name='" . WPT()->ame_data_key . "[" . WPT()->ame_activation_email ."]' size='25' type='email' value='" . WPT()->ame_options[WPT()->ame_activation_email] . "' required />";
 		if ( WPT()->ame_options[WPT()->ame_activation_email] ) {
 			echo "<span class='dashicons dashicons-yes' style='color: #66ab03;'></span>";
 		} else {
@@ -129,6 +176,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		$checkbox_status = get_option( WPT()->ame_deactivate_checkbox );
 		$current_api_key = WPT()->ame_options[WPT()->ame_api_key];
 		$current_email = WPT()->ame_options[WPT()->ame_activation_email];
+
 		// Should match the settings_fields() value
 		if ( $_REQUEST['option_page'] != WPT()->ame_deactivate_checkbox ) {
 			if ( $activation_status == 'Deactivated' || $activation_status == '' || $api_key == '' || $api_email == '' || $checkbox_status == 'on' || $current_api_key != $api_key || $current_email != $api_email  ) {
@@ -157,6 +205,7 @@ class WPToolKit_Plugin_Manager_MENU {
 					update_option( "wptoolkit_plugin_manager_activated", 'Deactivated' );
 					update_option( WPT()->ame_options[WPT()->ame_activated_key], 'Deactivated' );
 				}
+
 				if ( isset( $activate_results['code'] ) ) {
 					switch ( $activate_results['code'] ) {
 						case '100':
@@ -209,10 +258,10 @@ class WPToolKit_Plugin_Manager_MENU {
 	}
 	// Returns the API License Key status from the WooCommerce API Manager on the server
 	public function license_key_status() {
-		$activation_status = get_option( WPT()->ame_activated_key );
+		// $activation_status = get_option( WPT()->ame_activated_key );
 		$args = array(
-			'email' => WPT()->ame_options[WPT()->ame_activation_email],
-			'licence_key' => WPT()->ame_options[WPT()->ame_api_key],
+			'email' 		=> WPT()->ame_options[WPT()->ame_activation_email],
+			'licence_key' 	=> WPT()->ame_options[WPT()->ame_api_key],
 			);
 		return json_decode( WPT()->key()->status( $args ), true );
 	}
@@ -238,18 +287,19 @@ class WPToolKit_Plugin_Manager_MENU {
 		// $activate_results = json_decode( WPT()->key()->status( $args ), true );
 		// print_r($activate_results); exit;
 		$options = ( $input == 'on' ? 'on' : 'off' );
+
 		if ( $options == 'on' && $activation_status == 'Activated' && WPT()->ame_options[WPT()->ame_api_key] != '' && WPT()->ame_options[WPT()->ame_activation_email] != '' ) {
 			// deactivates license key activation
 			$activate_results = json_decode( WPT()->key()->deactivate( $args ), true );
 			// Used to display results for development
 			//print_r($activate_results); exit();
 			if ( $activate_results['deactivated'] === true ) {
-				$update = array(
-					WPT()->ame_api_key => '',
-					WPT()->ame_activation_email => ''
-					);
-				$merge_options = array_merge( WPT()->ame_options, $update );
-				update_option( WPT()->ame_data_key, $merge_options );
+				// $update = array(
+					// WPT()->ame_api_key => '',
+					// WPT()->ame_activation_email => ''
+					// );
+				// $merge_options = array_merge( WPT()->ame_options, $update );
+				// update_option( WPT()->ame_data_key, $merge_options );
 				update_option( WPT()->ame_activated_key, 'Deactivated' );
 				add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', __( 'Plugin license deactivated. ', WPT()->text_domain ) . "{$activate_results['activations_remaining']}.", 'updated' );
 				return $options;
