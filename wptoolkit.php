@@ -37,12 +37,14 @@ add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_plugin_catalo
 add_action('core_upgrade_preamble', array("WPToolKit_Updates","get_theme_catalogue"));
 
 $wptoolkit_plugin_manager_nag_data = get_option( "wptoolkit_plugin_manager_nag_data" );
+
 //** Turns off WPMUDEV Dashboard Nags */
-if ( ! class_exists('WPMUDEV_Dashboard_Notice3') ) {
+if ( ! class_exists('WPMUDEV_Dashboard_Notice3') && ! class_exists('WPMUDEV_Dashboard_Notice') ) {
 	$wpmu_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_wpmudev"];
 
 	if($wpmu_nag !== false && $wpmu_nag == "on"){
 		class WPMUDEV_Dashboard_Notice3 {}
+		class WPMUDEV_Dashboard_Notice {}
 	}
 }
 
