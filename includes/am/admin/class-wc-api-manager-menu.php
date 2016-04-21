@@ -94,7 +94,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		//Nag Override settings
 		register_setting( WPT()->wpt_nag_data_key, WPT()->wpt_nag_data_key, "" );
 		add_settings_section( WPT()->wpt_nag_data_key."_section", __( 'Override Nags', WPT()->text_domain ), array( $this, 'wpt_nag_section_text' ), WPT()->wpt_nag_override_tab_key );
-		add_settings_field( "wpt_nag_override_wpmudev", __( 'WPMU Div', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_wpmudev", __( 'WPMU Dev', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_elegantthemes", __( 'Elegant Themes', WPT()->text_domain ),  array( $this, 'wpt_nag_override_elegantthemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_woothemes", __( 'Woo Themes', WPT()->text_domain ), array( $this, 'wpt_nag_override_woothemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 	}
