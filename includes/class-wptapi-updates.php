@@ -54,7 +54,7 @@ class WPToolKit_Updates {
 						$product_id = 'WPToolKit%20Plugin%20Manager';
 						$instance = get_option('wptoolkit_plugin_manager_instance');
 
-						$plugin_url = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$wptoolkit_plugins[$key]['plugin_id'].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_status';
+						$plugin_url = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$wptoolkit_plugins[$key]['plugin_id'].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_update&site_url='.home_url();
 						
 				        $obj = new stdClass();
 				        $obj->slug = $wptoolkit_plugins[$key]['plugin_id'];
@@ -96,7 +96,7 @@ class WPToolKit_Updates {
 						$product_id = 'WPToolKit%20Plugin%20Manager';
 						$instance = get_option('wptoolkit_plugin_manager_instance');
 
-						$theme_url = 'https://api.wptoolkit.com/?wpt_theme_download=get&theme_id='.$wptoolkit_themes[$key]['theme_id'].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_status';
+						$theme_url = 'https://api.wptoolkit.com/?wpt_theme_download=get&theme_id='.$wptoolkit_themes[$key]['theme_id'].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_update&site_url='.home_url();
 						
 				        $obj = array(
 							"theme" 		=> $key,

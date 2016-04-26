@@ -186,7 +186,7 @@ function WPT_updater( $api, $action, $args ) {
 		$res                = new stdClass();
 		$res->name          = $the_plugin['name'];
 		$res->version       = $the_plugin['version'];
-		$res->download_link = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key;
+		$res->download_link = 'https://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key."&request=install&site_url=".home_url();
 		$res->tested = '10.0';
 		return $res;
 	}
@@ -210,7 +210,7 @@ function WPT_theme_updater( $api, $action, $args ) {
 		$res                = new stdClass();
 		$res->name          = $the_theme['name'];
 		$res->version       = $the_theme['version'];
-		$res->download_link = 'https://api.wptoolkit.com/?wpt_theme_download=get&theme_id='.$slug.'&email='.$email.'&licence_key='.$licence_key;
+		$res->download_link = 'https://api.wptoolkit.com/?wpt_theme_download=get&theme_id='.$slug.'&email='.$email.'&licence_key='.$licence_key."&request=install&site_url=".home_url();
 		$res->tested = '10.0';
 		return $res;
 	}
