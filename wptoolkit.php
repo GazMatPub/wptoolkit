@@ -141,7 +141,7 @@ function WPT_override_wpmudev() {
 		}
 	}
 	
-	foreach($wp_filter["themes_api"] as $pk => $prio){
+	foreach((array)$wp_filter["themes_api"] as $pk => $prio){
 		foreach($prio as $ak => $arr){
 			foreach($arr["function"] as $ok => $obj){
 				if(is_object($obj)){
@@ -188,7 +188,7 @@ function WPT_override_wpmudev() {
 	
 	foreach($wp_filter["site_transient_update_themes"] as $pk => $prio){
 		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
+			foreach((array)$arr["function"] as $ok => $obj){
 				if(is_object($obj)){
 					$subject = get_class($obj);
 					$pattern = '/WPMU/i';
@@ -203,7 +203,7 @@ function WPT_override_wpmudev() {
 	
 	foreach($wp_filter["pre_set_site_transient_update_themes"] as $pk => $prio){
 		foreach($prio as $ak => $arr){
-			foreach($arr["function"] as $ok => $obj){
+			foreach((array)$arr["function"] as $ok => $obj){
 				if(is_object($obj)){
 					$subject = get_class($obj);
 					$pattern = '/WPMU/i';
