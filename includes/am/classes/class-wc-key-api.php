@@ -50,7 +50,7 @@ class WPToolKit_Plugin_Manager_Key {
 
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
  
-		$request = wp_remote_get( $target_url, array("timeout" => 100)  );
+		$request = wp_safe_remote_get( $target_url, array("timeout" => 100)  );
 
 		// $request = wp_remote_post( WPT()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 
@@ -77,7 +77,7 @@ class WPToolKit_Plugin_Manager_Key {
 
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
 
-		$request = wp_remote_get( $target_url, array("timeout" => 100) );
+		$request = wp_safe_remote_get( $target_url, array("timeout" => 100) );
 
 		// $request = wp_remote_post( WPT()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 
@@ -109,7 +109,7 @@ class WPToolKit_Plugin_Manager_Key {
 
 		$target_url = esc_url_raw( $this->create_software_api_url( $args ) );
 
-		$request = wp_remote_get( $target_url, array("timeout" => 100)  );
+		$request = wp_safe_remote_get( $target_url, array("timeout" => 100)  );
 
 		// $request = wp_remote_post( WPT()->upgrade_url . 'wc-api/am-software-api/', array( 'body' => $args ) );
 

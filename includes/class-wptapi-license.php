@@ -21,7 +21,7 @@ class WPToolKit_Plugin_Manager {
 	 * Self Upgrade Values
 	 */
 	// Base URL to the remote upgrade API Manager server. If not set then the Author URI is used.
-	public $upgrade_url = 'https://api.wptoolkit.com/';
+	public $upgrade_url = 'http://api.wptoolkit.com/';
 
 	/**
 	 * @var string
@@ -158,7 +158,7 @@ class WPToolKit_Plugin_Manager {
 			$this->ame_options 				= get_option( $this->ame_data_key );
 			$this->ame_plugin_name 			= 'wptoolkit/wptoolkit.php'; // same as plugin slug. if a theme use a theme name like 'twentyeleven'
 			$this->ame_product_id 			= get_option( $this->ame_product_id_key ); // Software Title
-			$this->ame_renew_license_url 	= 'https://api.wptoolkit.com/my-account'; // URL to renew a license. Trailing slash in the upgrade_url is required.
+			$this->ame_renew_license_url 	= 'http://api.wptoolkit.com/my-account'; // URL to renew a license. Trailing slash in the upgrade_url is required.
 			$this->ame_instance_id 			= get_option( $this->ame_instance_key ); // Instance ID (unique to each blog activation)
 			/**
 			 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
