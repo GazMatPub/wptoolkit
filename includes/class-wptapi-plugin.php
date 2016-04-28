@@ -61,7 +61,7 @@ class WPToolKit_Plugin {
 			$instance = get_option('wptoolkit_plugin_manager_instance');
 
 
-			$plugin_url = 'https://api.wptoolkit.com/?'.$request.'='.$wptoolkit_plugins[$plugin][$id_key].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_status';
+			$plugin_url = 'http://api.wptoolkit.com/?'.$request.'='.$wptoolkit_plugins[$plugin][$id_key].'&email='.$email.'&licence_key='.$licence_key.'&product_id='.$product_id.'&instance='.$instance.'&request=wptoolkit_status';
 
 	    	$url = $plugin_url;
 			$item_dir = dirname($wptoolkit_plugins[$plugin][$file_key]);
