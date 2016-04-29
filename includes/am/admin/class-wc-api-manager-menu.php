@@ -82,7 +82,7 @@ class WPToolKit_Plugin_Manager_MENU {
 	public function load_settings() { 
 		register_setting( WPT()->ame_data_key, WPT()->ame_data_key, array( $this, 'validate_options' ) );
 		// API Key
-		add_settings_section( WPT()->ame_api_key, __( 'WPToolKit License Activation', WPT()->text_domain ), array( $this, 'wc_am_api_key_text' ), WPT()->ame_activation_tab_key );
+		add_settings_section( WPT()->ame_api_key, __( '&nbsp;', WPT()->text_domain ), array( $this, 'wc_am_api_key_text' ), WPT()->ame_activation_tab_key );
 		// add_settings_field( 'status', __( 'WPToolKit License Key Status', WPT()->text_domain ), array( $this, 'wc_am_api_key_status' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_api_key, __( 'WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_api_key_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key);
@@ -93,7 +93,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		
 		//Nag Override settings
 		register_setting( WPT()->wpt_nag_data_key, WPT()->wpt_nag_data_key, "" );
-		add_settings_section( WPT()->wpt_nag_data_key."_section", __( 'Override Nags', WPT()->text_domain ), array( $this, 'wpt_nag_section_text' ), WPT()->wpt_nag_override_tab_key );
+		add_settings_section( WPT()->wpt_nag_data_key."_section", __( '&nbsp;', WPT()->text_domain ), array( $this, 'wpt_nag_section_text' ), WPT()->wpt_nag_override_tab_key );
 		add_settings_field( "wpt_nag_override_wpmudev", __( 'WPMU Dev', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_elegantthemes", __( 'Elegant Themes', WPT()->text_domain ),  array( $this, 'wpt_nag_override_elegantthemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_woothemes", __( 'Woo Themes', WPT()->text_domain ), array( $this, 'wpt_nag_override_woothemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
