@@ -56,7 +56,7 @@ class WPToolKit_Plugin_Manager_MENU {
 				}
 			?>
 			</h2>
-				<form action='options.php' method='post'>
+				<form action='options.php' id="wpt_settings_form" method='post'>
 					<div class="main">
 				<?php
 					if( $tab == WPT()->ame_activation_tab_key ) {
@@ -83,7 +83,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		register_setting( WPT()->ame_data_key, WPT()->ame_data_key, array( $this, 'validate_options' ) );
 		// API Key
 		add_settings_section( WPT()->ame_api_key, __( 'WPToolKit License Activation', WPT()->text_domain ), array( $this, 'wc_am_api_key_text' ), WPT()->ame_activation_tab_key );
-		add_settings_field( 'status', __( 'WPToolKit License Key Status', WPT()->text_domain ), array( $this, 'wc_am_api_key_status' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
+		// add_settings_field( 'status', __( 'WPToolKit License Key Status', WPT()->text_domain ), array( $this, 'wc_am_api_key_status' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_api_key, __( 'WPToolKit License Key', WPT()->text_domain ), array( $this, 'wc_am_api_key_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key );
 		add_settings_field( WPT()->ame_activation_email, __( 'WPToolKit License email', WPT()->text_domain ), array( $this, 'wc_am_api_email_field' ), WPT()->ame_activation_tab_key, WPT()->ame_api_key);
 		// Activation settings
@@ -133,7 +133,7 @@ class WPToolKit_Plugin_Manager_MENU {
 	
 	// Provides text for api key section
 	public function wc_am_api_key_text() {
-		//
+		echo '<input type="button" onClick="jQuery(\'input#api_key, input#activation_email\').val(\'\').removeAttr(\'required\'); jQuery(\'form#wpt_settings_form input#submit\').click();" class="button button-primary" value="Delete API Account"/>';
 	}
 	// Returns the API License Key status from the WooCommerce API Manager on the server
 	public function wc_am_api_key_status() {
