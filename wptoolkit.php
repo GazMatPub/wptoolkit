@@ -63,6 +63,7 @@ if ( ! function_exists( 'woothemes_updater_notice' ) ) {
 		function woothemes_updater_notice() {}
 	}
 }
+
 if ( ! class_exists( 'WPToolKit' ) ) {
 
 	/**
@@ -106,6 +107,25 @@ if ( ! class_exists( 'WPToolKit' ) ) {
 
 		public function init() {
 			add_action( 'admin_enqueue_scripts', array($this,'wpt_enqueue_scripts') );
+			
+			/* Overrides GravityForms Nag */
+			if( class_exists('GFCommon') ){
+				$wptoolkit_plugin_manager_nag_data = get_option( "wptoolkit_plugin_manager_nag_data" );
+				$GF_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_gravityforms"];
+				if($GF_nag !== false && $GF_nag == "on"){
+					delete_option( 'rg_gforms_message' );
+				}
+			}
+			
+			/* This block of code is just temporary and must be deleted on next version 1.2.10 or later*/
+			$nag_first_GF = get_option( "wptoolkit_nagGF" );
+			if($nag_first_GF != "nope"){
+				$nag_options = get_option( "wptoolkit_plugin_manager_nag_data" );
+				$nag_options["wpt_nag_override_gravityforms"] = "on";
+				update_option( "wptoolkit_plugin_manager_nag_data", $nag_options );
+				update_option( "wptoolkit_nagGF", "nope" );
+			}
+			/* ***** */
 		}
 
 		public function install() {

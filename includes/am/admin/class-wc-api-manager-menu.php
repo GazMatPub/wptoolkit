@@ -97,6 +97,7 @@ class WPToolKit_Plugin_Manager_MENU {
 		add_settings_field( "wpt_nag_override_wpmudev", __( 'WPMU Dev', WPT()->text_domain ), array( $this, 'wpt_nag_override_wpmudev_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_elegantthemes", __( 'Elegant Themes', WPT()->text_domain ),  array( $this, 'wpt_nag_override_elegantthemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 		add_settings_field( "wpt_nag_override_woothemes", __( 'Woo Themes', WPT()->text_domain ), array( $this, 'wpt_nag_override_woothemes_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
+		add_settings_field( "wpt_nag_override_gravityforms", __( 'Gravity Forms', WPT()->text_domain ), array( $this, 'wpt_nag_override_gravityforms_input' ), WPT()->wpt_nag_override_tab_key, WPT()->wpt_nag_data_key."_section");
 	}
 	
 	//Generates form for Disable WPMU Dev updater nag checkbox
@@ -123,6 +124,15 @@ class WPToolKit_Plugin_Manager_MENU {
 		echo checked(  WPT()->nag_options["wpt_nag_override_woothemes"], 'on' );
 		echo '/>';
 		?><span class="description"><?php _e( 'Remove Woo Themes updater nags', WPT()->text_domain ); ?></span>
+		<?php
+	}
+	
+	//Generates form for Disable Gravity Forms License nag checkbox
+	public function wpt_nag_override_gravityforms_input(){		
+		echo '<input type="checkbox" id="wpt_nag_override_gravityforms" name="' . WPT()->wpt_nag_data_key . "[wpt_nag_override_gravityforms]" .' value="on"';
+		echo checked(  WPT()->nag_options["wpt_nag_override_gravityforms"], 'on' );
+		echo '/>';
+		?><span class="description"><?php _e( 'Remove Grvity Forms License nags', WPT()->text_domain ); ?></span>
 		<?php
 	}
 	

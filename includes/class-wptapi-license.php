@@ -67,6 +67,7 @@ class WPToolKit_Plugin_Manager {
 	public $ame_menu_tab_deactivation_title;
 
 	public $ame_options;
+	public $nag_options;
 	public $ame_plugin_name;
 	public $ame_product_id;
 	public $ame_renew_license_url;
@@ -264,6 +265,7 @@ class WPToolKit_Plugin_Manager {
 				"wpt_nag_override_wpmudev"			=> 'on',
 				"wpt_nag_override_elegantthemes"	=> 'on',
 				"wpt_nag_override_woothemes"		=> 'on',
+				"wpt_nag_override_gravityforms"		=> 'on',
 			);
 			update_option( $this->wpt_nag_data_key, $nag_options );
 		}
