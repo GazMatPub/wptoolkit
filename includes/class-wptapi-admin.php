@@ -114,6 +114,7 @@ class WPTAPI_Admin {
 	                <ul id="Container" class="gkitcontainer">
 
 	                	<?php
+						$item_thumbnail = false;
 						if($type == "plugin" || $type == "woocommerce"){
 							$wptoolkit_items = get_option('wptoolkit_plugins');
 							$label = "plugin";
@@ -129,6 +130,7 @@ class WPTAPI_Admin {
 							$file_key = "Theme_file";
 							$nonce_prefix = "install-theme_";
 							$install_action = "install-theme&theme=";
+							$item_thumbnail = "http://api.wptoolkit.com/?request=thumbnail&theme_id=";
 						}
 		
 	                	if(is_array($wptoolkit_items)) {
@@ -148,7 +150,8 @@ class WPTAPI_Admin {
 								    $stringCut = substr($item_description, 0, $maxLength);
 								    $item_description = substr($stringCut, 0, strrpos($stringCut, ' ')); 
 								}
-
+								$item_description = strip_tags($item_description, '<cite>');
+								
 								if (!empty($item['wptoolkit_name'])) {
 									$item_name = $item['wptoolkit_name'];
 								} else {
@@ -164,7 +167,7 @@ class WPTAPI_Admin {
 		                        <li class="gkititem mix <?php echo implode(' ', (array)$item_category); ?>">
 		                            <div class="wpt-plugin-wrapper">
 		                                <span class="wpt-plugin-title"><?php echo $item_name; ?></span>
-		                                <div class="wpt-plugin-inner"><p><?php echo strip_tags($item_description, '<cite>'); ?></p></div> 
+		                                <div class="wpt-plugin-inner"><p><?php if($item_thumbnail) echo "<img style=\"width:100%;position:initial;\" src=\"".$item_thumbnail.$item["theme_id"]."&type=".$type."\"/>"; else echo $item_description; ?></p></div> 
 
 	                            		<?php if ($item_active) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-activated" value="Activated" disabled>Activated</button>
