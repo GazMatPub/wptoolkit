@@ -106,6 +106,7 @@ if ( ! class_exists( 'WPToolKit' ) ) {
 		}
 
 		public function init() {
+			
 			add_action( 'admin_enqueue_scripts', array($this,'wpt_enqueue_scripts') );
 			
 			/* Overrides GravityForms Nag */
@@ -207,7 +208,7 @@ function WPT_updater( $api, $action, $args ) {
 		$res->name          = $the_plugin['name'];
 		$res->version       = $the_plugin['version'];
 		$res->download_link = 'http://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key."&request=install&site_url=".home_url();
-		$res->tested = '10.0';
+		$res->tested = $the_plugin['version'];
 		return $res;
 	}
 	return $api;
@@ -237,6 +238,14 @@ function WPT_theme_updater( $api, $action, $args ) {
 	return $api;
 }
 add_filter( 'themes_api', "WPT_theme_updater", 100, 3);
+
+//** Allow Plugin Re-install **/
+function WPT_force_reinstall($options){
+	
+	$options['abort_if_destination_exists'] = false;
+	return( $options );
+}
+add_filter( "upgrader_package_options",'WPT_force_reinstall');
 
 //** Force WPToolkit to update its lists of plugins and themes
 function WPT_force_update_lists(){

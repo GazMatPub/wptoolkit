@@ -121,7 +121,9 @@ class WPTAPI_Admin {
 							$dir_root = WP_PLUGIN_DIR;
 							$file_key = "Plugin_file";
 							$nonce_prefix = "install-plugin_";
+							$unonce_prefix = "upgrade-plugin_";
 							$install_action = "install-plugin&plugin=";
+							$update_action = "upgrade-plugin&plugin=";
 						}elseif($type == "theme"){
 							$wptoolkit_items = get_option('wptoolkit_themes');
 							$label = "theme";
@@ -129,14 +131,15 @@ class WPTAPI_Admin {
 							$dir_root = get_theme_root();
 							$file_key = "Theme_file";
 							$nonce_prefix = "install-theme_";
+							$unonce_prefix = "update-theme_";
 							$install_action = "install-theme&theme=";
+							$update_action = "update-theme&theme=";
 							$item_thumbnail = "http://api.wptoolkit.com/?request=thumbnail&theme_id=";
 						}
 		
 	                	if(is_array($wptoolkit_items)) {
 
 		                	foreach($wptoolkit_items as $key => $item) {
-								
 								if( ($type == "woocommerce" && (!preg_match("/\bwoocommerce/i",$item['name']) && !preg_match("/\bwoocommerce/i",$key)))
 									|| ($type == "plugin" && (preg_match("/\bwoocommerce/i",$item['name']) || preg_match("/\bwoocommerce/i",$key)))
 								){
@@ -162,6 +165,7 @@ class WPTAPI_Admin {
 								if( ($type == "theme" && $curr_theme == $item_name) || ( ($type == "woocommerce" || $type == "plugin") && in_array( $key, apply_filters('active_plugins', get_option('active_plugins')) ) )){
 									$item_active = true;
 								}
+								
 		                	?>
 		                		
 		                        <li class="gkititem mix <?php echo implode(' ', (array)$item_category); ?>">
@@ -170,10 +174,11 @@ class WPTAPI_Admin {
 		                                <div class="wpt-plugin-inner"><p><?php if($item_thumbnail) echo "<img style=\"width:100%;position:initial;\" src=\"".$item_thumbnail.$item["theme_id"]."&type=".$type."\"/>"; else echo $item_description; ?></p></div> 
 
 	                            		<?php if ($item_active) { ?>
-	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-activated" value="Activated" disabled>Activated</button>
+	                            			<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Activated <em>(Click to re-install)</em></a> 
 
 	                            		<?php } else if (file_exists(trailingslashit($dir_root). $item[$file_key]) ) { ?>
-											<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button>	
+											<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button -->
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Re-install</a> 
 	                            		
 	                            		<?php } else if ( $item['free'] == 1 ) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin" value="Install">Install for free</button>
