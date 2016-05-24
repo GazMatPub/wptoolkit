@@ -174,11 +174,11 @@ class WPTAPI_Admin {
 		                                <div class="wpt-plugin-inner"><p><?php if($item_thumbnail) echo "<img style=\"width:100%;position:initial;\" src=\"".$item_thumbnail.$item["theme_id"]."&type=".$type."\"/>"; else echo $item_description; ?></p></div> 
 
 	                            		<?php if ($item_active) { ?>
-	                            			<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Activated <em>(Click to re-install)</em></a> 
+	                            			<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="reinstall-this button install-plugin pl-activated">Activated <em>(Click to re-install)</em></a> 
 
 	                            		<?php } else if (file_exists(trailingslashit($dir_root). $item[$file_key]) ) { ?>
 											<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button -->
-											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Installed <em>(Click to re-install)</em></a> 
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="reinstall-this button install-plugin pl-activated">Installed <em>(Click to re-install)</em></a> 
 	                            		
 	                            		<?php } else if ( $item['free'] == 1 ) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin" value="Install">Install for free</button>
@@ -236,6 +236,14 @@ class WPTAPI_Admin {
 					// });
 
 	        	// });
+				
+				jQuery(".reinstall-this").live("click",function(){
+					var obj = jQuery(this);
+				if(confirm("Please Note: Any customizations you have made to theme or plugin files will be lost. Please consider using child themes for modifications.\n\r\n\rAre you sure you wish to continue with the re-install?")){
+					return true;
+				}
+					return false;
+				});
 
 	            $(function(){  
 	                $('#Container').mixItUp();
