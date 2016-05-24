@@ -178,7 +178,7 @@ class WPTAPI_Admin {
 
 	                            		<?php } else if (file_exists(trailingslashit($dir_root). $item[$file_key]) ) { ?>
 											<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button -->
-											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Re-install</a> 
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin pl-activated">Installed <em>(Click to re-install)</em></a> 
 	                            		
 	                            		<?php } else if ( $item['free'] == 1 ) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin" value="Install">Install for free</button>
@@ -188,7 +188,7 @@ class WPTAPI_Admin {
 
 	                            		<?php } else { ?>
 	                            			<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin type-<?php echo $type; ?>" value="Install">Install</button --> 
-											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin">New Install</a> 
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin">Install</a> 
 	                            		<?php } ?>
 		                            </div>
 		                        </li>
