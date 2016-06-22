@@ -64,11 +64,11 @@ class WPTAPI_Admin {
 				break;
 		}
 
-		if ($type != "theme" && !get_option('wptoolkit_plugins')) {
+		// if ($type != "theme" && !get_option('wptoolkit_plugins')) {
 			WPToolKit_Updates::get_plugin_catalogue(false);
-		}elseif($type == "theme" && !get_option('wptoolkit_themes')) {
+		// }elseif($type == "theme" && !get_option('wptoolkit_themes')) {
 			WPToolKit_Updates::get_theme_catalogue(false);
-		}
+		// }
 	
 
 	?>

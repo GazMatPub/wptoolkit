@@ -156,5 +156,5 @@ class WPToolKit_Updates {
 
 WPToolKit_Updates::init();
 
-add_action( 'wptoolkit_twicedaily_update', array('WPToolKit_Updates', 'get_plugin_catalogue'), 10 );
-add_action( 'wptoolkit_twicedaily_update', array('WPToolKit_Updates', 'get_theme_catalogue'), 11 );
+add_action( 'wptoolkit_hourly_update', array('WPToolKit_Updates', 'get_plugin_catalogue'), 10 );
+add_action( 'wptoolkit_hourly_update', array('WPToolKit_Updates', 'get_theme_catalogue'), 11 );

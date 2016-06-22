@@ -130,11 +130,11 @@ if ( ! class_exists( 'WPToolKit' ) ) {
 		}
 
 		public function install() {
-			wp_schedule_event(time(), 'twicedaily', 'wptoolkit_twicedaily_update');
+			wp_schedule_event(time(), 'hourly', 'wptoolkit_hourly_update');
 			WPT()->activation();
 		}
 		public function uninstall() {
-			wp_clear_scheduled_hook('wptoolkit_twicedaily_update');
+			wp_clear_scheduled_hook('wptoolkit_hourly_update');
 			WPT()->uninstall();
 		}
 
