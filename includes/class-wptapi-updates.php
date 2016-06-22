@@ -120,7 +120,8 @@ class WPToolKit_Updates {
 
 	public static function get_plugin_catalogue($output = true) { 
 		$url = 'http://api.wptoolkit.com/?wptoolkit_repo=json&type=all&site_url=';
-		$request = wp_remote_post( $url, array('timeout' => 45) );  
+		// $request = wp_remote_post( $url, array('timeout' => 45) );  
+		$request = wp_remote_post( $url,  array( 'timeout' => 45, 'decompress' => false ));
 		if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
 	    	
 	    	$json = json_decode( $request['body'], true ); // attempt decode
@@ -137,7 +138,8 @@ class WPToolKit_Updates {
 	
 	public static function get_theme_catalogue($output = false) { 
 		$url = 'http://api.wptoolkit.com/?wptoolkit_repo=json&type=themes';
-		$request = wp_remote_post( $url, array('timeout' => 45) );  
+		// $request = wp_remote_post( $url, array('timeout' => 45) );  
+		$request = wp_remote_post( $url,  array( 'timeout' => 45, 'decompress' => false ));
 		if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
 	    	
 	    	$json = json_decode( $request['body'], true ); // attempt decode
