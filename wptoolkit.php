@@ -3,7 +3,7 @@
  * Plugin Name: WP Toolkit
  * Plugin URI: https://wptoolkit.com/
  * Description: Premium Theme, Plugin & WooCommerce Extension Manager
- * Version: 1.2.8
+ * Version: 1.2.9
  * Author: WP Toolkit
  * Author URI:  https://wptoolkit.com/ 
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
@@ -63,6 +63,7 @@ if ( ! function_exists( 'woothemes_updater_notice' ) ) {
 		function woothemes_updater_notice() {}
 	}
 }
+
 if ( ! class_exists( 'WPToolKit' ) ) {
 
 	/**
@@ -105,15 +106,35 @@ if ( ! class_exists( 'WPToolKit' ) ) {
 		}
 
 		public function init() {
+			
 			add_action( 'admin_enqueue_scripts', array($this,'wpt_enqueue_scripts') );
+			
+			/* Overrides GravityForms Nag */
+			if( class_exists('GFCommon') ){
+				$wptoolkit_plugin_manager_nag_data = get_option( "wptoolkit_plugin_manager_nag_data" );
+				$GF_nag = $wptoolkit_plugin_manager_nag_data["wpt_nag_override_gravityforms"];
+				if($GF_nag !== false && $GF_nag == "on"){
+					delete_option( 'rg_gforms_message' );
+				}
+			}
+			
+			/* This block of code is just temporary and must be deleted on next version 1.2.10 or later*/
+			$nag_first_GF = get_option( "wptoolkit_nagGF" );
+			if($nag_first_GF != "nope"){
+				$nag_options = get_option( "wptoolkit_plugin_manager_nag_data" );
+				$nag_options["wpt_nag_override_gravityforms"] = "on";
+				update_option( "wptoolkit_plugin_manager_nag_data", $nag_options );
+				update_option( "wptoolkit_nagGF", "nope" );
+			}
+			/* ***** */
 		}
 
 		public function install() {
-			wp_schedule_event(time(), 'twicedaily', 'wptoolkit_twicedaily_update');
+			wp_schedule_event(time(), 'hourly', 'wptoolkit_hourly_update');
 			WPT()->activation();
 		}
 		public function uninstall() {
-			wp_clear_scheduled_hook('wptoolkit_twicedaily_update');
+			wp_clear_scheduled_hook('wptoolkit_hourly_update');
 			WPT()->uninstall();
 		}
 
@@ -187,7 +208,7 @@ function WPT_updater( $api, $action, $args ) {
 		$res->name          = $the_plugin['name'];
 		$res->version       = $the_plugin['version'];
 		$res->download_link = 'http://api.wptoolkit.com/?wpt_plugin_download=get&plugin_id='.$slug.'&email='.$email.'&licence_key='.$licence_key."&request=install&site_url=".home_url();
-		$res->tested = '10.0';
+		$res->tested = $the_plugin['version'];
 		return $res;
 	}
 	return $api;
@@ -217,6 +238,14 @@ function WPT_theme_updater( $api, $action, $args ) {
 	return $api;
 }
 add_filter( 'themes_api', "WPT_theme_updater", 100, 3);
+
+//** Allow Plugin Re-install **/
+function WPT_force_reinstall($options){
+	
+	$options['abort_if_destination_exists'] = false;
+	return( $options );
+}
+add_filter( "upgrader_package_options",'WPT_force_reinstall');
 
 //** Force WPToolkit to update its lists of plugins and themes
 function WPT_force_update_lists(){
