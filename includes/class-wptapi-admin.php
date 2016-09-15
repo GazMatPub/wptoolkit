@@ -64,11 +64,11 @@ class WPTAPI_Admin {
 				break;
 		}
 
-		if ($type != "theme" && !get_option('wptoolkit_plugins')) {
+		// if ($type != "theme" && !get_option('wptoolkit_plugins')) {
 			WPToolKit_Updates::get_plugin_catalogue(false);
-		}elseif($type == "theme" && !get_option('wptoolkit_themes')) {
+		// }elseif($type == "theme" && !get_option('wptoolkit_themes')) {
 			WPToolKit_Updates::get_theme_catalogue(false);
-		}
+		// }
 	
 
 	?>
@@ -114,13 +114,16 @@ class WPTAPI_Admin {
 	                <ul id="Container" class="gkitcontainer">
 
 	                	<?php
+						$item_thumbnail = false;
 						if($type == "plugin" || $type == "woocommerce"){
 							$wptoolkit_items = get_option('wptoolkit_plugins');
 							$label = "plugin";
 							$dir_root = WP_PLUGIN_DIR;
 							$file_key = "Plugin_file";
 							$nonce_prefix = "install-plugin_";
+							$unonce_prefix = "upgrade-plugin_";
 							$install_action = "install-plugin&plugin=";
+							$update_action = "upgrade-plugin&plugin=";
 						}elseif($type == "theme"){
 							$wptoolkit_items = get_option('wptoolkit_themes');
 							$label = "theme";
@@ -128,13 +131,15 @@ class WPTAPI_Admin {
 							$dir_root = get_theme_root();
 							$file_key = "Theme_file";
 							$nonce_prefix = "install-theme_";
+							$unonce_prefix = "update-theme_";
 							$install_action = "install-theme&theme=";
+							$update_action = "update-theme&theme=";
+							$item_thumbnail = "http://api.wptoolkit.com/?request=thumbnail&theme_id=";
 						}
 		
 	                	if(is_array($wptoolkit_items)) {
 
 		                	foreach($wptoolkit_items as $key => $item) {
-								
 								if( ($type == "woocommerce" && (!preg_match("/\bwoocommerce/i",$item['name']) && !preg_match("/\bwoocommerce/i",$key)))
 									|| ($type == "plugin" && (preg_match("/\bwoocommerce/i",$item['name']) || preg_match("/\bwoocommerce/i",$key)))
 								){
@@ -148,7 +153,8 @@ class WPTAPI_Admin {
 								    $stringCut = substr($item_description, 0, $maxLength);
 								    $item_description = substr($stringCut, 0, strrpos($stringCut, ' ')); 
 								}
-
+								$item_description = strip_tags($item_description, '<cite>');
+								
 								if (!empty($item['wptoolkit_name'])) {
 									$item_name = $item['wptoolkit_name'];
 								} else {
@@ -159,18 +165,20 @@ class WPTAPI_Admin {
 								if( ($type == "theme" && $curr_theme == $item_name) || ( ($type == "woocommerce" || $type == "plugin") && in_array( $key, apply_filters('active_plugins', get_option('active_plugins')) ) )){
 									$item_active = true;
 								}
+								
 		                	?>
 		                		
 		                        <li class="gkititem mix <?php echo implode(' ', (array)$item_category); ?>">
 		                            <div class="wpt-plugin-wrapper">
 		                                <span class="wpt-plugin-title"><?php echo $item_name; ?></span>
-		                                <div class="wpt-plugin-inner"><p><?php echo strip_tags($item_description, '<cite>'); ?></p></div> 
+		                                <div class="wpt-plugin-inner"><p><?php if($item_thumbnail) echo "<img style=\"width:100%;position:initial;\" src=\"".$item_thumbnail.$item["theme_id"]."&type=".$type."\"/>"; else echo $item_description; ?></p></div> 
 
 	                            		<?php if ($item_active) { ?>
-	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-activated" value="Activated" disabled>Activated</button>
+	                            			<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="reinstall-this button install-plugin pl-activated">Activated <em>(Click to re-install)</em></a> 
 
 	                            		<?php } else if (file_exists(trailingslashit($dir_root). $item[$file_key]) ) { ?>
-											<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button>	
+											<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin pl-installed" value="Install" disabled>Installed</button -->
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="reinstall-this button install-plugin pl-activated">Installed <em>(Click to re-install)</em></a> 
 	                            		
 	                            		<?php } else if ( $item['free'] == 1 ) { ?>
 	                            			<button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin" value="Install">Install for free</button>
@@ -180,7 +188,7 @@ class WPTAPI_Admin {
 
 	                            		<?php } else { ?>
 	                            			<!-- button type="submit" data-plugin="<?php echo $key; ?>" class="button install-plugin type-<?php echo $type; ?>" value="Install">Install</button --> 
-											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin">New Install</a> 
+											<a href="<?php echo admin_url('update.php')?>?action=<?php echo $install_action; ?><?php echo urlencode($key); ?>&_wpnonce=<?php echo wp_create_nonce($nonce_prefix.$key);?>&type=WPT" class="button install-plugin">Install</a> 
 	                            		<?php } ?>
 		                            </div>
 		                        </li>
@@ -228,6 +236,14 @@ class WPTAPI_Admin {
 					// });
 
 	        	// });
+				
+				jQuery(".reinstall-this").live("click",function(){
+					var obj = jQuery(this);
+				if(confirm("Please Note: Any customizations you have made to theme or plugin files will be lost. Please consider using child themes for modifications.\n\r\n\rAre you sure you wish to continue with the re-install?")){
+					return true;
+				}
+					return false;
+				});
 
 	            $(function(){  
 	                $('#Container').mixItUp();

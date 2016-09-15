@@ -432,8 +432,10 @@ class WP_GitHub_Updater {
 
     // Output the update message
     $fail  = __( 'The plugin has been updated, but could not be reactivated. Please reactivate it manually.', 'github_plugin_updater' );
-    $success = __( 'Plugin reactivated successfully.', 'github_plugin_updater' );
-    echo is_wp_error( $activate ) ? $fail : $success;
+    $success = 'Plugin reactivated successfully.<br>';
+	if(is_plugin_active($hook_extra["plugin"])){
+		echo is_wp_error( $activate ) ? $fail : $success;
+	}
     return $result;
 
   }

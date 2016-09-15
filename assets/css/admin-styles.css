@@ -35,3 +35,5 @@ li.gkititem { float: left; margin: 0 2em 2em 0!important; padding: 0; vertical-a
 	.gk-col {  margin: 1% 0 1% 0%; } 
 	.gk-span_1_of_4 { width: 100%; }
 }
+
+a.pl-activated{ background: #27C228!important;}
