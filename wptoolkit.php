@@ -3,7 +3,7 @@
  * Plugin Name: WP Toolkit
  * Plugin URI: https://wptoolkit.com/
  * Description: Premium Theme, Plugin & WooCommerce Extension Manager
- * Version: 1.2.9
+ * Version: 1.2.10
  * Author: WP Toolkit
  * Author URI:  https://wptoolkit.com/ 
  * Copyright: WP Toolkit is based on GPLKit (https://gplkit.com). WP Toolkit is copyright 2016. 
@@ -130,11 +130,11 @@ if ( ! class_exists( 'WPToolKit' ) ) {
 		}
 
 		public function install() {
-			wp_schedule_event(time(), 'hourly', 'wptoolkit_hourly_update');
+			wp_schedule_event(time(), 'twicedaily', 'wptoolkit_twicedaily_update');
 			WPT()->activation();
 		}
 		public function uninstall() {
-			wp_clear_scheduled_hook('wptoolkit_hourly_update');
+			wp_clear_scheduled_hook('wptoolkit_twicedaily_update');
 			WPT()->uninstall();
 		}
 
@@ -195,6 +195,9 @@ function WPT_remote_download($url, $save_path = false){
 function WPT_updater( $api, $action, $args ) {
 	if( $action == 'plugin_information' && empty( $api ) && isset($_GET["type"]) && $_GET["type"] == "WPT" ){
 		
+		// fallback for wptoolkit_plugins being deleted
+		if ( !get_option('wptoolkit_plugins') ) WPToolKit_Updates::get_plugin_catalogue(false);
+
 		$wptoolkit_plugins = get_option('wptoolkit_plugins');
 		$the_plugin = $wptoolkit_plugins[$_GET["plugin"]];
 		
@@ -218,6 +221,9 @@ add_filter( 'plugins_api', "WPT_updater", 100, 3);
 //** Force Wordpress from downloading WPToolkit plugins from our repo
 function WPT_theme_updater( $api, $action, $args ) {
 	if( $action == 'theme_information' && empty( $api ) && isset($_GET["type"]) && $_GET["type"] == "WPT" ){
+
+		// fallback for wptoolkit_themes being deleted
+		if ( !get_option('wptoolkit_themes') ) WPToolKit_Updates::get_theme_catalogue(false);
 		
 		$wptoolkit_plugins = get_option('wptoolkit_themes');
 		$the_theme = $wptoolkit_plugins[$_GET["theme"]];
